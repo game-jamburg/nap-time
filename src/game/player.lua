@@ -2,15 +2,14 @@ Player = class("Player", Component)
 
 function Player:initialize(name)
     Component.initialize(self, name)
-    
 end
+
 function Player:onAdd(entity)
     self.entity.transform.position = Vector:new(500,500)
-
 end
 
 
-function Player:onUpdate(dt)
+function Player:onFixedUpdate(dt)
     speed = 300
     -- Reaktion auf gedrueckte Pfeiltasten
     local movement = Vector:new()
@@ -29,8 +28,8 @@ function Player:onUpdate(dt)
     if love.keyboard.isDown("up") then
         movement.y = -1
     end
+
     movement:normalize()
     self.entity.transform.position = self.entity.transform.position + movement *speed*dt
+
 end
-
-
