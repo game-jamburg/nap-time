@@ -59,6 +59,7 @@ function Entity:addChild(entity)
     end
     entity.parent = self
     table.insert(self.children, entity)
+    return entity
 end
 
 function Entity:detach()
