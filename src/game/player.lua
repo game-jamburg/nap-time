@@ -10,7 +10,7 @@ function Player:onAdd(entity)
 end
 
 
-function Player:onUpdate(dt)
+function Player:onFixedUpdate(dt)
 
     -- Reaktion auf gedrueckte Pfeiltasten
     local movement = Vector:new()

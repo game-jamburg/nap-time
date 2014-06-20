@@ -10,9 +10,9 @@ function Component:update(dt)
     self:onUpdate(dt)
 end
 
-function Component:fixedupdate()
+function Component:fixedupdate(dt)
     PropertyObject.update(self)
-    self:onFixedUpdate()
+    self:onFixedUpdate(dt)
 end
 
 function Component:added(entity)
@@ -36,5 +36,5 @@ end
 
 function Component:onAdd(entity) end
 function Component:onUpdate(dt)  end
-function Component:onFixedUpdate() end
+function Component:onFixedUpdate(dt) end
 function Component:onEvent(type, data) end

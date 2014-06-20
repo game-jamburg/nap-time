@@ -37,9 +37,9 @@ function Scene:update(dt)
     end
 end
 
-function Scene:fixedupdate()
+function Scene:fixedupdate(dt)
     for k, v in pairs(self.entities) do
-        v:fixedupdate()
+        v:fixedupdate(dt)
     end
 end
 

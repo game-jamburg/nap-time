@@ -29,8 +29,8 @@ function State:update(dt)
     self:postUpdate(dt)
 end
 
-function State:fixedupdate()
-    self.scene:fixedupdate()
+function State:fixedupdate(dt)
+    self.scene:fixedupdate(dt)
 end
 
 function State:handleEvent(type, data)

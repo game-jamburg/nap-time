@@ -88,8 +88,8 @@ function Engine:subscribe()
     
     local f_update = fixedupdate
     fixedupdate = function(dt)
-        if f_update then f_update() end
-        self:fixedupdate()
+        if f_update then f_update(dt) end
+        self:fixedupdate(dt)
     end
 
     local draw = love.draw
