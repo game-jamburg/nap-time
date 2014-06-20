@@ -2,15 +2,20 @@ tween = require("engine/external/tween")
 class = require("engine/external/middleclass")
 
 require "engine"
+require "game/player"
 
 engine = Engine:new()
 
 function love.load()
     state = State:new()
 
-    label = state.scene:addEntity(Entity:new("label"))
+    player = state.scene:addEntity(Entity:new("player")) 
+    playercomponent = player:addComponent(Player:new("player"))
+
+
+    label = player:addChild(Entity:new("label"))
     text = label:addComponent(Text:new("text", "Hello World", nil, 30))
-    label.transform.global.position = Vector.WindowSize / 2
+    -- label.transform.global.position = Vector.WindowSize / 2
 
     engine:pushState(state)
 end

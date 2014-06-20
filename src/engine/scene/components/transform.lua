@@ -32,11 +32,11 @@ function Transform:initialize(name)
                 if not p then
                     self[key] = value
                 elseif key == "position" then
-                    t.position = value - p.global.position
+                    self.position = value - p.global.position
                 elseif key == "rotation" then
-                    t.rotation = value - p.global.rotation
+                    self.rotation = value - p.global.rotation
                 elseif key == "scale" then
-                    t.scale = value:perdiv(p.global.scale)
+                    self.scale = value:perdiv(p.global.scale)
                 end 
             end
         end
