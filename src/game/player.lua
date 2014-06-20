@@ -10,7 +10,6 @@ end
 
 
 function Player:onUpdate(dt)
-
     -- Reaktion auf gedrueckte Pfeiltasten
     local movement = Vector:new()
     if love.keyboard.isDown("left") then
@@ -28,7 +27,6 @@ function Player:onUpdate(dt)
     if love.keyboard.isDown("up") then
         movement.y = -1
     end
+
     self.entity.transform.position = self.entity.transform.position + movement *300*dt
 end
-
-
