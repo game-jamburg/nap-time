@@ -29,9 +29,27 @@ function love.keypressed(key)
 end
 
 function love.update(dt)
+    fixedupdatecheck(dt)
     tween.update(dt)
 
-    label.transform.global.rotation = state.scene.time
 end
+
+-- fixed timestep stuff
+local fixedTimestep = 0.02
+local timeSinceLastFixedUpdate = 0
+
+function fixedupdatecheck(dt)
+    timeSinceLastFixedUpdate = timeSinceLastFixedUpdate + dt
+    while timeSinceLastFixedUpdate > fixedTimestep do
+        timeSinceLastFixedUpdate = timeSinceLastFixedUpdate - fixedTimestep
+        fixedupdate()
+    end
+end
+
+function fixedupdate()
+    label.transform.global.rotation = state.scene.time
+
+end
+-- end of fixed timestep stuff
 
 engine:subscribe()
