@@ -37,6 +37,12 @@ function Scene:update(dt)
     end
 end
 
+function Scene:fixedupdate(dt)
+    for k, v in pairs(self.entities) do
+        v:fixedupdate(dt)
+    end
+end
+
 function Scene:handleEvent(type, data)
     for k, v in pairs(self.entities) do
         if v:onEvent(type, data) then return true end

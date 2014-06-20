@@ -31,7 +31,6 @@ end
 function love.update(dt)
     fixedupdatecheck(dt)
     tween.update(dt)
-
 end
 
 -- fixed timestep stuff
@@ -42,12 +41,11 @@ function fixedupdatecheck(dt)
     timeSinceLastFixedUpdate = timeSinceLastFixedUpdate + dt
     while timeSinceLastFixedUpdate > fixedTimestep do
         timeSinceLastFixedUpdate = timeSinceLastFixedUpdate - fixedTimestep
-        fixedupdate()
+        fixedupdate(fixedTimestep)
     end
 end
 
-function fixedupdate()
-    label.transform.global.rotation = state.scene.time
+function fixedupdate(dt)
 end
 -- end of fixed timestep stuff
 
