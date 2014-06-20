@@ -4,9 +4,13 @@ class = require("engine/external/middleclass")
 require "engine"
 require "game/player"
 
+require "game/level"
+
 engine = Engine:new()
 
 function love.load()
+    engine.resources:load(Resources.Image, "ship", "data/gfx/ship.png")
+
     state = State:new()
 
     player = state.scene:addEntity(Entity:new("player")) 
@@ -16,6 +20,9 @@ function love.load()
     label = player:addChild(Entity:new("label"))
     text = label:addComponent(Text:new("text", "Hello World", nil, 30))
     -- label.transform.global.position = Vector.WindowSize / 2
+
+    level = state.scene:addEntity(Entity:new("level"))
+    ship = level:addComponent(Level:new("ship"))
 
     engine:pushState(state)
 end
