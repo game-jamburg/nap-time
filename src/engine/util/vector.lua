@@ -1,16 +1,16 @@
 function assert_vector(v)
-    assert(v ~= nil and v.__name == "Vector")
+    assert(v ~= nil and v:isInstanceOf(Vector))
 end
 
 Vector = class("Vector")
 
-function Vector:__init(x, y)
+function Vector:initialize(x, y)
     self.x = x or 0
     self.y = y or 0
 end
 
 function Vector:clone()
-    return Vector(self.x, self.y)
+    return Vector:new(self.x, self.y)
 end
 
 function Vector:unpack()
@@ -18,30 +18,30 @@ function Vector:unpack()
 end
 
 function Vector:__tostring()
-	return "[" .. tonumber(self.x) .. " | " .. tonumber(self.y) .. "]"
+	return "[" .. tonumber(self.x) .. ", " .. tonumber(self.y) .. "]"
 end
 
 function Vector.__unm(a)
-	return Vector(-a.x, -a.y)
+	return Vector:new(-a.x, -a.y)
 end
 
 function Vector.__add(a, b)
     assert_vector(a)
     assert_vector(b)
-	return Vector(a.x + b.x, a.y + b.y)
+	return Vector:new(a.x + b.x, a.y + b.y)
 end
 
 function Vector.__sub(a, b)
     assert_vector(a)
     assert_vector(b)
-	return Vector(a.x - b.x, a.y - b.y)
+	return Vector:new(a.x - b.x, a.y - b.y)
 end
 
 function Vector.__mul(a, b)
 	if type(a) == "number" then
-		return Vector(a*b.x, a*b.y)
+		return Vector:new(a*b.x, a*b.y)
 	elseif type(b) == "number" then
-		return Vector(b*a.x, b*a.y)
+		return Vector:new(b*a.x, b*a.y)
 	else
         assert_vector(a)
         assert_vector(b)
@@ -49,10 +49,18 @@ function Vector.__mul(a, b)
 	end
 end
 
+function Vector.__concat(a, b)
+    return tostring(a) .. tostring(b)
+end
+
 function Vector.__div(a, b)
     assert_vector(a)
-    assert(type(b) == "number", "Not a number: " .. b)
-	return Vector(a.x / b, a.y / b)
+    assert(type(b) == "number" or b:isInstanceOf(Vector), "Not a number or vector: " .. b)
+    if type(b) == "number" then
+        return Vector:new(a.x / b, a.y / b)
+    else
+        return Vector:new(a.x / b.x, a.y / b.y)
+    end
 end
 
 function Vector.__eq(a, b)
@@ -76,8 +84,15 @@ end
 function Vector.permul(a,b)
     assert_vector(a)
     assert_vector(b)
-	return Vector(a.x*b.x, a.y*b.y)
+	return Vector:new(a.x*b.x, a.y*b.y)
 end
+
+function Vector.perdiv(a,b)
+    assert_vector(a)
+    assert_vector(b)
+    return Vector:new(a.x/b.x, a.y/b.y)
+end
+
 
 function Vector:len2()
 	return self.x * self.x + self.y * self.y
@@ -115,7 +130,15 @@ end
 
 function Vector:rotated(phi)
 	local c, s = math.cos(phi), math.sin(phi)
-	return Vector(c * self.x - s * self.y, s * self.x + c * self.y)
+	return Vector:new(c * self.x - s * self.y, s * self.x + c * self.y)
+end
+
+function Vector:angle()
+    return self:signedAngleTo(Vector:new(1, 0))
+end
+
+function Vector:signedAngleTo(v2)
+    return -math.atan2(self.x * v2.y - self.y * v2.x, self * v2)
 end
 
 function Vector:angleTo(v2)
@@ -129,20 +152,20 @@ function Vector:angleTo(v2)
 end
 
 function Vector:perpendicular()
-	return Vector(-self.y, self.x)
+	return Vector:new(-self.y, self.x)
 end
 
 function Vector:projectOn(v)
     assert_vector(v)
 	-- (self * v) * v / v:len2()
 	local s = (self.x * v.x + self.y * v.y) / (v.x * v.x + v.y * v.y)
-	return Vector(s * v.x, s * v.y)
+	return Vector:new(s * v.x, s * v.y)
 end
 
 function Vector:mirrorOn(v)
     assert_vector(v)
 	local s = 2 * (self.x * v.x + self.y * v.y) / (v.x * v.x + v.y * v.y)
-	return Vector(s * v.x - self.x, s * v.y - self.y)
+	return Vector:new(s * v.x - self.x, s * v.y - self.y)
 end
 
 function Vector:cross(v)
@@ -154,8 +177,8 @@ function Vector:unpack()
     return self.x, self.y
 end
 
--- returns the mouse position in entity space
-function getMouseVector()
-    local x, y = love.mouse.getPosition()
-    return (Vector(x, y) - HALFSIZE) / states.game.zoom + states.game.camCenter
+function Vector:serialize()
+    return string.format('Vector:new(%g, %g)', self.x, self.y)
 end
+
+Vector.static.WindowSize = Vector:new(800, 600)

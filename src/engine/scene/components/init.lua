@@ -1,0 +1,7 @@
+require "engine/scene/components/drawable"
+require "engine/scene/components/sprite"
+require "engine/scene/components/rectangle"
+require "engine/scene/components/transform"
+require "engine/scene/components/text"
+require "engine/scene/components/particlesystem"
+require "engine/scene/components/soundsource"

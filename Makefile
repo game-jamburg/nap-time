@@ -1,5 +1,5 @@
 default: run
 
 run:
-	love game/
+	love src/
 

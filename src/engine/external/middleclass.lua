@@ -1,7 +1,6 @@
 local middleclass = {
   _VERSION     = 'middleclass v3.0.1',
   _DESCRIPTION = 'Object Orientation for Lua',
-  _URL         = 'https://github.com/kikito/middleclass',
   _LICENSE     = [[
     MIT LICENSE
 
@@ -157,6 +156,15 @@ end
 function Object:initialize() end
 
 function Object:__tostring() return "instance of " .. tostring(self.class) end
+
+-- ADDITION by opatut
+function Object:clone() 
+  local instance = self.class:allocate()
+  for k, v in pairs(self) do
+    instance[k] = v
+  end
+  return instance
+end
 
 function Object:isInstanceOf(aClass)
   return type(self)                == 'table' and
