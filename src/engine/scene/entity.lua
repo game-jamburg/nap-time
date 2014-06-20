@@ -6,6 +6,7 @@ function Entity:initialize(name)
     end
     self.name = name
     self.components = {}
+    self.typedComponents = {}
     self.parent = nil
     self.children = {}
 
@@ -31,6 +32,12 @@ function Entity:update(dt)
     end
 end
 
+function Entity:fixedupdate(dt)
+    for i, component in pairs(self.components) do
+        component:fixedupdate(dt)
+    end
+end
+
 function Entity:onEvent(type, data) 
     for i, component in pairs(self.components) do
         if component:onEvent(type, data) then return true end
@@ -42,6 +49,12 @@ function Entity:addComponent(component)
         error("Entity:addComponent requires instance of Component")
     end
     self.components[component.name] = component
+    
+    if not self.typedComponents[component.class]then
+        self.typedComponents[component.class] = {}
+    end
+    table.insert(self.typedComponents[component.class], component)
+    
     component:added(self)
     return component
 end

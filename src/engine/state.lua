@@ -29,6 +29,10 @@ function State:update(dt)
     self:postUpdate(dt)
 end
 
+function State:fixedupdate()
+    self.scene:fixedupdate()
+end
+
 function State:handleEvent(type, data)
     if self:onEvent(type, data) then return true end
     if self.scene:handleEvent(type, data) then return true end

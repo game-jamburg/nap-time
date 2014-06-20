@@ -26,7 +26,6 @@ end
 function love.update(dt)
     fixedupdatecheck(dt)
     tween.update(dt)
-
 end
 
 -- fixed timestep stuff
@@ -42,8 +41,6 @@ function fixedupdatecheck(dt)
 end
 
 function fixedupdate()
-    label.transform.global.rotation = state.scene.time
-
 end
 -- end of fixed timestep stuff
 
