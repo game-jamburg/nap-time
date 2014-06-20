@@ -48,7 +48,6 @@ end
 
 function fixedupdate()
     label.transform.global.rotation = state.scene.time
-
 end
 -- end of fixed timestep stuff
 

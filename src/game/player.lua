@@ -2,11 +2,10 @@ Player = class("Player", Component)
 
 function Player:initialize(name)
     Component.initialize(self, name)
-    
 end
+
 function Player:onAdd(entity)
     self.entity.transform.position = Vector:new(500,500)
-
 end
 
 
