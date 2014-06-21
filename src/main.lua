@@ -14,6 +14,7 @@ require "game/level"
 require "game/positionbymouse"
 require "game/character"
 require "game/menubutton"
+require "game/score"
 
 engine = Engine:new()
 
@@ -24,8 +25,10 @@ function love.load()
     engine.resources:load(Resources.Image, "ninja-walk-upper", "data/gfx/anim/ninja/walk-upper.png")
     engine.resources:load(Resources.Image, "level01", "data/levels/level-01/background.png")
     engine.resources:load(Resources.Text,  "level01", "data/levels/level-01/mesh.lua")
-
+    engine.resources:load(Resources.Image,  "background", "data/gfx/gruen.jpg")
     state = State:new()
+    menu = State:new()
+    menu.scene.view = View:new()
     
     -- Mouse target
     mouseTarget = state.scene:addEntity(Entity:new("mousetarget"))
@@ -77,6 +80,11 @@ function love.load()
     buttencomponent = enemy:addComponent(MenuButton:new("button"))
     buttencomponent.click = function() love.event.quit() end
 
+    background = menu.scene:addEntity(Entity:new("background"))
+  
+    
+    background:addComponent(Sprite:new("background",engine.resources.image["background"]))
+    background:addComponent(Score:new("score", {{"Caro",5, true},{"Rafael",7, false},{"Paul",7,true},{"Damian",8,true}, {"Blubb",2,true}}, "pirates"))
 
     engine:pushState(state)
 end
@@ -86,7 +94,9 @@ function love.keypressed(key)
         state.scene:save("saved-level.lua")
     elseif key == "f5" then
         state:setScene(Scene.load("saved-level.lua"))
-    end
+    elseif key == "f1" and engine:getCurrentState() == state then
+        engine:pushState(menu)
+    end 
 end
 
 function love.update(dt)
