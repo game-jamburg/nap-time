@@ -35,7 +35,6 @@ for path in pathdata:
                 points.append(points[0])
             else:
                 relative = ord(ops[x][0]) >= ord('a')
-            print("OP: %s, %s" % (ops[x], relative), file=sys.stderr)
             x += 1
         else:
             p = (float(ops[x]), float(ops[x+1]))

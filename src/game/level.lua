@@ -5,6 +5,7 @@ function Level:initialize(name)
 
     self.sprite = Sprite:new("background", "level01")
     self.sprite.order = -1
+    self.sprite.origin = Vector:new(0, 0)
 
     local mesh = engine.resources.text.level01
     self.paths = loadstring("return " .. mesh, "level01.mesh")()

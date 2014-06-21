@@ -5,9 +5,10 @@ class = require("engine/external/middleclass")
 anal = require("engine/external/AnAL")
 
 require "engine"
+
 require "game/player"
 require "game/animation"
-
+require "game/camera"
 require "game/level"
 
 engine = Engine:new()
@@ -26,6 +27,7 @@ function love.load()
 
     playercomponent = player:addComponent(Player:new("player"))
     player:addComponent(SyncTransform:new("SyncTransform"))
+    player:addComponent(Camera:new("playercam"))
 
     local ani = Animation:new("Animation")
     ani:create(engine.resources.image.ninjawalk, 90, 128, 0.033, 21)
@@ -56,6 +58,10 @@ end
 function love.update(dt)
     fixedupdatecheck(dt)
     tween.update(dt)
+end
+
+function love.draw()
+    love.graphics.setBackgroundColor(100, 100, 100)
 end
 
 -- fixed timestep stuff

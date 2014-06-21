@@ -59,16 +59,16 @@ function Entity:addComponent(component)
     return component
 end
 
-function Entity:onAdd(state)
-    self.state = state
+function Entity:onAdd(scene)
+    self.scene = scene
     for _, child in pairs(self.children) do
-        state:addEntity(child)
+        scene:addEntity(child)
     end
 end
 
 function Entity:addChild(entity)
-    if self.state then
-        self.state:addEntity(entity)
+    if self.scene then
+        self.scene:addEntity(entity)
     end
     entity.parent = self
     table.insert(self.children, entity)
