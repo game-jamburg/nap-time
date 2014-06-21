@@ -87,11 +87,15 @@ end
 
 function Client:onEvent(type, data)
     if type == "enter" then
-        Log:info("Connecting...")
+        Log:info("Connecting to server " .. DEFAULTS.ip .. ":" .. DEFAULTS.port)
         self.client = lube.udpClient()
         self.client.handshake = "Hi!"
         self.client.callbacks.recv = function(...) self:onReceive(...) end
-        self.client:connect(DEFAULTS.ip, DEFAULTS.port)
+        local ok, msg = self.client:connect(DEFAULTS.ip, DEFAULTS.port, false)
+        if not ok then
+            Log:error(string.format("Error connecting to %s:%s:",
+                DEFAULTS.ip, DEFAULTS.port), msg)
+        end
     end
 end
 
@@ -144,6 +148,6 @@ function Client:syncTopLevelEntity(entity)
 end
 
 function Client:enqueue(msg)
-    Log:verbose("Enqueued message", msg)
+    -- Log:verbose("Enqueued message", msg)
     table.insert(self.msgQueue, msg)
 end
