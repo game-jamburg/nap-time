@@ -12,44 +12,58 @@ require "game/camera"
 require "game/mousegui"
 require "game/level"
 require "game/positionbymouse"
+require "game/character"
 
 engine = Engine:new()
 
 function love.load()
     engine.resources:load(Resources.Image, "target", "data/target.png")
+    engine.resources:load(Resources.Image, "blur", "data/blur.png")
+    engine.resources:load(Resources.Image, "ninjawalk", "data/gfx/anim/ninja-walk.png")
     engine.resources:load(Resources.Image, "level01", "data/levels/level-01/background.png")
     engine.resources:load(Resources.Text,  "level01", "data/levels/level-01/mesh.lua")
 
     state = State:new()
     
+    -- Mouse target
     mouseTarget = state.scene:addEntity(Entity:new("mousetarget"))
     mousegui = mouseTarget:addComponent(MouseGUI:new("mousegui", "target"))
     mousegui.scale = Vector:new(0.2,0.2)
     mouseTarget:addComponent(PositionByMouse:new("positionbymouse"))
 
-    player = state.scene:addEntity(Entity:new("player")) 
-
-    -- Test stuff
-    engine.resources:load(Resources.Image, "ninjawalk", "data/gfx/anim/ninja-walk.png")
-
-    playercomponent = player:addComponent(Player:new("player"))
-    player:addComponent(SyncTransform:new("SyncTransform"))
-    player:addComponent(Camera:new("playercam"))
-
-    local ani = Animation:new("Animation")
-    ani:create(engine.resources.image.ninjawalk, 90, 128, 0.033, 21)
-    player:addComponent(ani)
-
     level = state.scene:addEntity(Entity:new("level"))
     ship = level:addComponent(Level:new("ship"))
 
-    sprite = player:addComponent(Sprite:new("sprite", "target"))
-    sprite.scaleFactor = 0.25
-    player:addComponent(Physics:new("physics", function()
-        return love.physics.newCircleShape(30), 0, 20, 1
-    end))
+    -- Player
+    player = state.scene:addEntity(Entity:new("player")) 
+    player.transform.position = Vector:new(1000, 2000)
 
-    playercomponent.target = mouseTarget.transform
+    player:addComponent(Character:new("character", "Ninj'arrr"))
+
+    player:addComponent(Player:new("player"))
+    player:addComponent(SyncTransform:new("SyncTransform"))
+    player.components.player.target = mouseTarget.transform
+    player:addComponent(Camera:new("playercam"))
+    player:addComponent(Physics:new("physics", function() return love.physics.newCircleShape(30), 0, 20, 1 end))
+
+    shadow = player:addComponent(Sprite:new("shadow", "blur"))
+    shadow.color = Color:new(0, 0, 0, 0.5)
+    shadow.order = 1
+    shadow.scaleFactor = 0.3
+
+    local animation = Animation:new("Animation", "ninjawalk", 90, 128, 0.033, 21)
+    animation.origin = Vector:new(0.6, 0.7)
+    player.children.lower:addComponent(animation)
+
+    -- Test Enemy
+    enemy = state.scene:addEntity(Entity:new("enemy"))
+    enemy.transform.position = Vector:new(1000, 1800)
+    shadow = enemy:addComponent(Sprite:new("shadow", "blur"))
+    shadow.color = Color:new(0, 0, 0, 0.5)
+    shadow.order = 1
+    shadow.scaleFactor = 0.3
+    enemy:addComponent(Character:new("character", "Test Pirate"))
+
 
     engine:pushState(state)
 end
