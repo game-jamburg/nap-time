@@ -9,7 +9,9 @@ require "engine"
 require "game/player"
 require "game/animation"
 require "game/camera"
+require "game/mousegui"
 require "game/level"
+require "game/positionbymouse"
 
 engine = Engine:new()
 
@@ -19,6 +21,11 @@ function love.load()
     engine.resources:load(Resources.Text,  "level01", "data/levels/level-01/mesh.lua")
 
     state = State:new()
+    
+    mouseTarget = state.scene:addEntity(Entity:new("mousetarget"))
+    mousegui = mouseTarget:addComponent(MouseGUI:new("mousegui", "target"))
+    mousegui.scale = Vector:new(0.2,0.2)
+    mouseTarget:addComponent(PositionByMouse:new("positionbymouse"))
 
     player = state.scene:addEntity(Entity:new("player")) 
 
@@ -42,7 +49,7 @@ function love.load()
         return love.physics.newCircleShape(30), 0, 20, 1
     end))
 
-    -- playercomponent.target = ball.transform
+    playercomponent.target = mouseTarget.transform
 
     engine:pushState(state)
 end
