@@ -17,6 +17,7 @@ engine = Engine:new()
 
 function love.load()
     engine.resources:load(Resources.Image, "target", "data/target.png")
+    engine.resources:load(Resources.Image, "blur", "data/blur.png")
     engine.resources:load(Resources.Image, "level01", "data/levels/level-01/background.png")
     engine.resources:load(Resources.Text,  "level01", "data/levels/level-01/mesh.lua")
 
@@ -28,6 +29,7 @@ function love.load()
     mouseTarget:addComponent(PositionByMouse:new("positionbymouse"))
 
     player = state.scene:addEntity(Entity:new("player")) 
+    player.transform.position = Vector:new(1000, 2000)
 
     -- Test stuff
     engine.resources:load(Resources.Image, "ninjawalk", "data/gfx/anim/ninja-walk.png")
@@ -36,15 +38,19 @@ function love.load()
     player:addComponent(SyncTransform:new("SyncTransform"))
     player:addComponent(Camera:new("playercam"))
 
-    local ani = Animation:new("Animation")
-    ani:create(engine.resources.image.ninjawalk, 90, 128, 0.033, 21)
-    player:addComponent(ani)
+    shadow = player:addComponent(Sprite:new("shadow", "blur"))
+    shadow.color = Color:new(0, 0, 0, 0.5)
+    shadow.order = 1
+    shadow.scaleFactor = 0.3
+
+
+    local animation = Animation:new("Animation", "ninjawalk", 90, 128, 0.033, 21)
+    animation.origin = Vector:new(0.6, 0.7)
+    player:addComponent(animation)
 
     level = state.scene:addEntity(Entity:new("level"))
     ship = level:addComponent(Level:new("ship"))
 
-    sprite = player:addComponent(Sprite:new("sprite", "target"))
-    sprite.scaleFactor = 0.25
     player:addComponent(Physics:new("physics", function()
         return love.physics.newCircleShape(30), 0, 20, 1
     end))

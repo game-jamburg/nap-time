@@ -15,8 +15,10 @@ end
 
 function Physics:onAdd(entity)
     local shape, dx, dy, density = self.createShape()
-    dx = dx or 0
-    dy = dy or 0
+
+    local pos = self.entity.transform.global.position
+    dx = (dx or 0) + pos.x
+    dy = (dy or 0) + pos.y
     density = density or 1
 
     self.body = love.physics.newBody(self.entity.scene.world.physicsWorld, dx, dy, "dynamic")

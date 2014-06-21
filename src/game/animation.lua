@@ -1,11 +1,18 @@
-Animation = class("Animation", Drawable)
+Animation = class("Animation", Sprite)
 
-function Animation:initialize(name)
-    Drawable.initialize(self, name)
-end
+function Animation:initialize(name, image, frameWidth, frameHeight, delay, frames)
+    Sprite.initialize(self, name, image)
+    self.animation = nil
+    self.frameWidth = frameWidth
+    self.frameHeight = frameHeight
+    self.delay = delay
+    self.frames = frames
 
-function Animation:create(image, fw, fh, delay, frames)
-    self.animation = newAnimation(image, fw, fh, delay, frames)
+    self.speed = 1
+    self:addProperty(Property.Integer:new(self, "order"))
+
+    local img = engine.resources.image[self.image]
+    self.animation = newAnimation(img, self.frameWidth, self.frameHeight, self.delay, self.frames)
 end
 
 function Animation:onUpdate(dt)
@@ -14,9 +21,17 @@ function Animation:onUpdate(dt)
 end
 
 function Animation:onDraw()
-    local position = self.entity and self.entity.transform.global.position or Vector:new(0, 0) - offset
+    local img = engine.resources.image[self.image]
+    if not img then return end
+
+    local origin   = self.origin:permul(Vector:new(self.frameWidth, self.frameHeight))
+    local position = self.entity and self.entity.transform.global.position or Vector:new(0, 0)
     local rotation = self.entity and self.entity.transform.global.rotation or 0
-    local height = self.animation.fh
-    local width = self.animation.fw
-    self.animation:draw(position.x, position.y, rotation, 1, 1, width/2, height/2)
+    local scale    = self.entity and self.entity.transform.global.scale or Vector:new(1, 1)
+    scale = scale * self.scaleFactor
+
+    Drawable.onDraw(self)
+
+    self.color:set()
+    self.animation:draw(position.x, position.y, rotation, scale.x, scale.y, origin.x, origin.y)
 end

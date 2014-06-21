@@ -76,7 +76,7 @@ function Engine:draw()
     local view = self:getCurrentState().scene.view
     view:push()
     self.renderer:render()
-    self:getCurrentState().scene.world:debugDraw()
+    -- self:getCurrentState().scene.world:debugDraw()
     View:popAll()
     self:renderGUI()
 end

@@ -4,11 +4,6 @@ function Player:initialize(name)
     self.speed = 300
     Component.initialize(self, name)
 end
-
-function Player:onAdd(entity)
-    self.entity.transform.position = Vector:new(0,0)
-end
-
  
 function Player:onFixedUpdate(dt)
     -- Reaktion auf gedrueckte Pfeiltasten
