@@ -2,6 +2,10 @@ DEFAULTS = {}
 DEFAULTS.ip = "127.0.0.1"
 DEFAULTS.port = 1337
 
+function splitMessage(msg)
+    return msg:match("^(%S+) (.+)$")
+end
+
 Server = class("Server", State)
 
 function Server:initialize()
@@ -20,12 +24,17 @@ function Server:onConnect(id)
     table.insert(self.clients, id)
 
     -- report back to the client with ID
-    self.server:send("welcome " .. id, id)
+    self:sendSnapshot(id)
 end
 
 function Server:onReceive(data, id)
     Log:debug("Data received: " .. id .. " > " .. data)
     self.server:send("you sent me stuff", id)
+
+    local type, payload = splitMessage(data)
+    payload = loadstring("return " .. payload)()
+    self:onMessage(id, type, payload)
+    Log:verbose("finished receiving data")
 end
 
 function Server:onDisconnect(ip, port)
@@ -44,6 +53,19 @@ function Server:onEvent(type, data)
     end 
 end 
 
+function Server:sendSnapshot(id)
+    local data = "snapshot " .. serialize(self.scene)
+    self.server:send(data, id)
+end
+
+function Server:onMessage(id, type, data)
+    if type == "request-snapshot" then 
+        self:sendSnapshot()
+    end
+    Log:debug("Server received message of type " .. type .. " from client " .. id)
+end
+
+
 
 Client = class("Client", State)
 
@@ -58,14 +80,24 @@ function Client:onEvent(type, data)
         self.client.handshake = "Hi!"
         self.client.callbacks.recv = function(...) self:onReceive(...) end
         self.client:connect(DEFAULTS.ip, DEFAULTS.port)
-        self.client:send("hello server")
     end
 end
 
 function Client:onReceive(data)
-    Log:info("Client received stuff")
+    local type, payload = splitMessage(data)
+    payload = loadstring("return " .. payload)()
+    self:onMessage(type, payload)
 end
 
 function Client:preUpdate(dt)
     self.client:update(dt)
+end
+
+function Client:onMessage(type, data)
+    -- todo
+    -- Log:debug("Client received message of type " .. type)
+    if type == "snapshot" then
+        Log:debug("Received snapshot")
+        self.scene:apply(data)
+    end
 end

@@ -1,18 +1,5 @@
 Character = class("Character", Component)
 
---[[
-    
-    * Entity
-      > player: Player
-      > character: Character
-      > shadow: Sprite
-      * lower: LowerBody
-        > animation: Animation
-      * upper: UpperBody
-        > animation: Animation
-
-]]
-
 function Character:initialize(name, title, health)
     Component.initialize(self, name)
     self.title = title
@@ -20,8 +7,12 @@ function Character:initialize(name, title, health)
 end
 
 function Character:onAdd(entity)
-    self.upper = entity:addChild(Entity:new("upper"))
-    self.lower = entity:addChild(Entity:new("lower"))
+    if not entity.children.upper then
+        self.upper = entity:addChild(Entity:new("upper"))
+    end
+    if not entity.children.lower then
+        self.lower = entity:addChild(Entity:new("lower"))
+    end
 
     local label = entity:addChild(Entity:new("label"))
     label.transform.position.y = -50

@@ -12,7 +12,6 @@ function Player:onFixedUpdate(dt)
     if love.keyboard.isDown("down")  or love.keyboard.isDown("s") then movement.y =  1 end
     if love.keyboard.isDown("up")    or love.keyboard.isDown("w") then movement.y = -1 end
     movement:normalize()
-    
 
     if movement.x == 0 and movement.y == 0 then    
         self.entity.children.lower.components.animation.speed = 0

@@ -1,4 +1,8 @@
 function define(Type) 
+    if not Type then
+        Log:error("Cannot define type " .. tostring(Type) .. ". Class not found.")
+        return function(name) return function(data) return nil end end
+    end
     if not Type.restore then
         Log:error("Cannot define type " .. tostring(Type) .. ". Define method " .. tostring(Type) .. ":restore(data) first.")
         return function(name) return function(data) return nil end end

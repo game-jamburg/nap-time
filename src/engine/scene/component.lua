@@ -38,3 +38,17 @@ function Component:onAdd(entity) end
 function Component:onUpdate(dt)  end
 function Component:onFixedUpdate(dt) end
 function Component:onEvent(type, data) end
+
+function Component:apply(component)
+    self:onApply(component)
+    
+    for name, property in pairs(component.properties) do
+        if self.properties[name] then
+            self.properties[name]:set(property:get())
+        else
+            Log:debug("No such property whatever, fill this out if you need debug.")
+        end
+    end
+end
+
+function Component:onApply(component) end

@@ -5,6 +5,7 @@ function Logger:initialize()
     self.onMessage = nil
     self.levels = {"VERBOSE", "DEBUG", "INFO", "ERROR", "CRITICAL"}
     self.printLevel = self:getLevelNumber("VERBOSE")
+    self.prefix = nil
     -- self.fileLevel = self:getLevelNumber("INFO")
 end
 
@@ -13,7 +14,11 @@ function Logger:write(level, ...)
     table.insert(self.messages, {time, level, stringify(...)})
 
     if self.printLevel <= self:getLevelNumber(level) then
-        print(time, level, ...)
+        if self.prefix then
+            print(time, self.prefix .. level, ...)
+        else
+            print(time, level, ...)
+        end
     end
 end
 
