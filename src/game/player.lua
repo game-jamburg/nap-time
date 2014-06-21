@@ -16,8 +16,10 @@ function Player:onFixedUpdate(dt)
 
     if movement.x == 0 and movement.y == 0 then    
         self.entity.children.lower.components.animation.speed = 0
+        self.entity.children.upper.components.animation.speed = 0.6
     else 
         self.entity.children.lower.components.animation.speed = 1
+        self.entity.children.upper.components.animation.speed = 1
     end
 
     -- update position

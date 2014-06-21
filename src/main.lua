@@ -13,6 +13,7 @@ require "game/mousegui"
 require "game/level"
 require "game/positionbymouse"
 require "game/character"
+require "game/menubutton"
 
 engine = Engine:new()
 
@@ -70,6 +71,11 @@ function love.load()
     shadow.order = 1
     shadow.scaleFactor = 0.3
     enemy:addComponent(Character:new("character", "Test Pirate"))
+    
+    -- test menu button
+    butten = state.scene:addEntity(Entity:new("butten"))
+    buttencomponent = enemy:addComponent(MenuButton:new("button"))
+    buttencomponent.click = function() love.event.quit() end
 
 
     engine:pushState(state)
