@@ -71,11 +71,11 @@ function fixedupdatecheck(dt)
     timeSinceLastFixedUpdate = timeSinceLastFixedUpdate + dt
     while timeSinceLastFixedUpdate > fixedTimestep do
         timeSinceLastFixedUpdate = timeSinceLastFixedUpdate - fixedTimestep
-        fixedupdate(fixedTimestep)
+        love.fixedupdate(fixedTimestep)
     end
 end
 
-function fixedupdate(dt)
+function love.fixedupdate(dt)
 end
 -- end of fixed timestep stuff
 

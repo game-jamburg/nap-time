@@ -68,6 +68,10 @@ function Engine:update(dt)
     end
 end
 
+function Engine:fixedupdate(dt) 
+    self:getCurrentState():fixedupdate(dt)
+end
+
 function Engine:draw() 
     local view = self:getCurrentState().scene.view
     view:push()
@@ -93,6 +97,12 @@ function Engine:subscribe()
     love.update = function(dt)
         if update then update(dt) end
         self:update(dt)
+    end
+
+    local fixedupdate = love.fixedupdate
+    love.fixedupdate = function(dt)
+        if fixedupdate then fixedupdate(dt) end
+        self:fixedupdate(dt)
     end
 
     local draw = love.draw
