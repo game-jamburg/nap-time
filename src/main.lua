@@ -22,13 +22,13 @@ function love.load()
     player = state.scene:addEntity(Entity:new("player")) 
 
     -- Test stuff
-    engine.resources:load(Resources.Image, "playerwalk", "data/gfx/anim/player/walk.png")
+    engine.resources:load(Resources.Image, "ninjawalk", "data/gfx/anim/ninja-walk.png")
 
     playercomponent = player:addComponent(Player:new("player"))
     player:addComponent(SyncTransform:new("SyncTransform"))
 
     local ani = Animation:new("Animation")
-    ani:create(engine.resources.image.playerwalk, 139, 124, 0.033, 30)
+    ani:create(engine.resources.image.ninjawalk, 90, 128, 0.033, 21)
     player:addComponent(ani)
 
     label = player:addChild(Entity:new("label"))
