@@ -52,7 +52,7 @@ function love.load()
     shadow.order = 1
     shadow.scaleFactor = 0.3
 
-    local lowerWalk = Animation:new("Animation", "ninja-walk-lower", 103, 128, 0.033, 21)
+    local lowerWalk = Animation:new("Animation", "ninja-walk-lower", 104, 128, 0.033, 21)
     lowerWalk.origin = Vector:new(0.6, 0.7)
     lowerWalk.order = 1
     player.children.lower:addComponent(lowerWalk)
