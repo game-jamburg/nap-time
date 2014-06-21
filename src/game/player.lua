@@ -33,8 +33,3 @@ function Player:onFixedUpdate(dt)
     self.entity.transform.position = self.entity.transform.position + movement *self.speed*dt
 
 end
-
--- test gui
-function Player:onRenderGUI()
-    love.graphics.rectangle("fill", 0, 0, 100, 20)
-end

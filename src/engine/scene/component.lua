@@ -15,10 +15,6 @@ function Component:fixedupdate(dt)
     self:onFixedUpdate(dt)
 end
 
-function Component:renderGUI()
-    self:onRenderGUI()
-end
-
 function Component:added(entity)
     self.entity = entity
     self:onAdd(entity)
@@ -41,5 +37,4 @@ end
 function Component:onAdd(entity) end
 function Component:onUpdate(dt)  end
 function Component:onFixedUpdate(dt) end
-function Component:onRenderGUI() end
 function Component:onEvent(type, data) end

@@ -10,6 +10,7 @@ function Engine:initialize()
 
     self.states = {}
     self.renderer = Renderer:new()
+    self.guirenderer = Renderer:new()
     self.resources = Resources()
 
     self:updateGlobals(0)
@@ -81,7 +82,7 @@ end
 
 function Engine:renderGUI()
     Color.White:set()
-    self:getCurrentState():renderGUI()
+    self.guirenderer:render()
 end
 
 function Engine:handleEvent(type, data) 

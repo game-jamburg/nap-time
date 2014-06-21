@@ -1,4 +1,5 @@
 require "engine/scene/components/drawable"
+require "engine/scene/components/guidrawable"
 require "engine/scene/components/sprite"
 require "engine/scene/components/rectangle"
 require "engine/scene/components/transform"
