@@ -15,6 +15,8 @@ require "game/positionbymouse"
 require "game/character"
 require "game/menubutton"
 require "game/network"
+require "game/score"
+require "game/timer"
 
 engine = Engine:new()
 
@@ -24,10 +26,15 @@ function love.load(args)
     engine.resources:load(Resources.Image, "blur", "data/blur.png")
     engine.resources:load(Resources.Image, "ninja-walk-lower", "data/gfx/anim/ninja/walk-lower.png")
     engine.resources:load(Resources.Image, "ninja-walk-upper", "data/gfx/anim/ninja/walk-upper.png")
+    engine.resources:load(Resources.Image, "ninja-slash-upper", "data/gfx/anim/ninja/slash-upper.png")
     engine.resources:load(Resources.Image, "level01", "data/levels/level-01/background.png")
     engine.resources:load(Resources.Text,  "level01", "data/levels/level-01/mesh.lua")
+    engine.resources:load(Resources.Image,  "background", "data/gfx/gruen.jpg")
 
-
+    state = State:new()
+    menu = State:new()
+    menu.scene.view = View:new()
+    
     isServer = (args[2] == "--server")
     isClient = not isServer
 
@@ -89,21 +96,31 @@ function initLevel()
     player.children.upper:addComponent(upperWalk)
 
 
+    -- Test Enemy
+    enemy = state.scene:addEntity(Entity:new("enemy"))
+    enemy.transform.position = Vector:new(1000, 1800)
     shadow = enemy:addComponent(Sprite:new("shadow", "blur"))
     shadow.color = Color:new(0, 0, 0, 0.5)
     shadow.order = 1
     shadow.scaleFactor = 0.3
     
 
-
-
-    -- -- test menu button
-    -- butten = state.scene:addEntity(Entity:new("butten"))
-    -- buttencomponent = enemy:addComponent(MenuButton:new("button"))
-    -- buttencomponent.click = function() love.event.quit() end
-
-
+    background = menu.scene:addEntity(Entity:new("background"))
+  
     
+    background:addComponent(Sprite:new("background",engine.resources.image["background"]))
+    background:addComponent(Score:new("score", {{"Caro",5, true},{"Rafael",7, false},{"Paul",7,true},{"Damian",8,true}, {"Blubb",2,true}}, "pirates"))
+end
+
+
+function love.keypressed(key)
+    if key == " " then
+        state.scene:save("saved-level.lua")
+    elseif key == "f5" then
+        state:setScene(Scene.load("saved-level.lua"))
+    elseif key == "f1" and engine:getCurrentState() == state then
+        engine:pushState(menu)
+    end 
 end
 
 function love.update(dt)

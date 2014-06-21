@@ -74,6 +74,7 @@ end
 
 function Engine:draw() 
     local view = self:getCurrentState().scene.view
+    View.popAll()
     view:push()
     self.renderer:render()
     self:getCurrentState().scene.world:debugDraw()

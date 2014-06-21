@@ -1,6 +1,6 @@
 Animation = class("Animation", Sprite)
 
-function Animation:initialize(name, image, frameWidth, frameHeight, delay, frames)
+function Animation:initialize(name, image, frameWidth, frameHeight, delay, frames, mode)
     Sprite.initialize(self, name, image)
     self.anim = nil
 
@@ -9,12 +9,14 @@ function Animation:initialize(name, image, frameWidth, frameHeight, delay, frame
     self.delay = delay
     self.frames = frames
     self.speed = 1
+    self.mode = mode
 
     self:addProperty(Property.Number:new(self, "speed"))
     self:addProperty(Property.Number:new(self, "frameWidth"))
     self:addProperty(Property.Number:new(self, "frameHeight"))
     self:addProperty(Property.Number:new(self, "delay"))
     self:addProperty(Property.Number:new(self, "frames"))
+    self:addProperty(Property.Number:new(self, "mode"))
 end
 
 function Animation:onUpdate(dt)
@@ -31,6 +33,9 @@ function Animation:onDraw()
 
     if not self.anim then    
         self.anim = newAnimation(img, self.frameWidth, self.frameHeight, self.delay, self.frames)
+        if self.mode then
+            self.anim:setMode(self.mode)
+        end
     end
 
     local origin   = self.origin:permul(Vector:new(self.frameWidth, self.frameHeight))
