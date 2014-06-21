@@ -19,17 +19,24 @@ function Player:onAdd(entity)
     self.upperWalk.origin = Vector:new(0.6, 0.7)
     self.upperWalk.order = 2
     entity.children.upper:addComponent(self.upperWalk)
+
+    self.movement = Vector:new()
 end
  
 function Player:onFixedUpdate(dt)
-    local movement = Vector:new()
-    if love.keyboard.isDown("left")  or love.keyboard.isDown("a") then movement.x = -1 end
-    if love.keyboard.isDown("right") or love.keyboard.isDown("d") then movement.x =  1 end
-    if love.keyboard.isDown("down")  or love.keyboard.isDown("s") then movement.y =  1 end
-    if love.keyboard.isDown("up")    or love.keyboard.isDown("w") then movement.y = -1 end
-    movement:normalize()
+    local input = Vector:new()
+    if love.keyboard.isDown("left")  or love.keyboard.isDown("a") then input.x = -1 end
+    if love.keyboard.isDown("right") or love.keyboard.isDown("d") then input.x =  1 end
+    if love.keyboard.isDown("down")  or love.keyboard.isDown("s") then input.y =  1 end
+    if love.keyboard.isDown("up")    or love.keyboard.isDown("w") then input.y = -1 end
+    input:normalize()
+
+    local ms = 20
+    self.movement = self.movement * (1 - dt * ms) + input * dt * ms
     
-    if movement.x == 0 and movement.y == 0 then    
+    local standing = self.movement:len() < 0.1
+
+    if standing then
         self.entity.children.lower.components.animation.speed = 0
         if self.entity.children.upper.components.animation == self.upperWalk then
             self.entity.children.upper.components.animation.speed = 0.6
@@ -40,11 +47,11 @@ function Player:onFixedUpdate(dt)
     end
 
     -- update position
-    self.entity.transform.position = self.entity.transform.position + movement * self.speed * dt
+    self.entity.transform.position = self.entity.transform.position + self.movement * self.speed * dt
 
     -- lower body rotates with movement direction
-    if movement.x ~= 0 or movement.y ~= 0 then
-        self.entity.children.lower.transform.rotation = movement:angle()
+    if not standing then
+        self.entity.children.lower.transform.rotation = self.movement:angle()
     end
 
     -- upper body rotates to target
