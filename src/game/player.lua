@@ -17,7 +17,9 @@ function Player:onFixedUpdate(dt)
     self.entity.transform.position = self.entity.transform.position + movement * self.speed * dt
 
     -- lower body rotates with movement direction
-    self.entity.children.lower.transform.rotation = movement:angle()
+    if movement.x ~= 0 or movement.y ~= 0 then
+        self.entity.children.lower.transform.rotation = movement:angle()
+    end
 
     -- upper body rotates to target
     if self.target then
