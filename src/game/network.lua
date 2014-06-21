@@ -3,7 +3,12 @@ DEFAULTS.ip = "127.0.0.1"
 DEFAULTS.port = 1337
 
 function splitMessage(msg)
-    return msg:match("^(%S+) (.+)$")
+    local type, payload = msg:match("^(%S+) (.+)$")
+    if type then
+        return type, payload
+    else
+        return msg:match("^(%S+)$")
+    end
 end
 
 Server = class("Server", State)
@@ -29,12 +34,13 @@ end
 
 function Server:onReceive(data, id)
     Log:debug("Data received: " .. id .. " > " .. data)
-    self.server:send("you sent me stuff", id)
+    -- self.server:send("you sent me stuff", id)
 
     local type, payload = splitMessage(data)
-    payload = loadstring("return " .. payload)()
+    if payload then
+        payload = loadstring("return " .. payload)()
+    end
     self:onMessage(id, type, payload)
-    Log:verbose("finished receiving data")
 end
 
 function Server:onDisconnect(ip, port)
@@ -59,10 +65,12 @@ function Server:sendSnapshot(id)
 end
 
 function Server:onMessage(id, type, data)
-    if type == "request-snapshot" then 
-        self:sendSnapshot()
+    if type == "requestSnapshot" then
+        self:sendSnapshot(id)
+    elseif type == "updateComponent" then
+        self.scene:updateComponent(data[1], data[2])
     end
-    Log:debug("Server received message of type " .. type .. " from client " .. id)
+    Log:verbose("Recieved " .. type .. " from client " .. id)
 end
 
 
@@ -71,6 +79,8 @@ Client = class("Client", State)
 
 function Client:initialize()
     State.initialize(self)
+    self.timeSinceLastSnapshot = 0
+    self.msgQueue = {}
 end
 
 function Client:onEvent(type, data)
@@ -85,19 +95,46 @@ end
 
 function Client:onReceive(data)
     local type, payload = splitMessage(data)
-    payload = loadstring("return " .. payload)()
+    if payload then
+        payload = loadstring("return " .. payload)()
+    end
     self:onMessage(type, payload)
 end
 
 function Client:preUpdate(dt)
     self.client:update(dt)
+    if self.timeSinceLastSnapshot > 1 then
+        self:requestSnapshot()
+        self.timeSinceLastSnapshot = 0
+    else
+        self.timeSinceLastSnapshot = self.timeSinceLastSnapshot + dt
+    end
+
+    -- Send messages in queue
+    for _, msg in pairs(self.msgQueue) do
+        self.client:send(msg)
+    end
+    self.msgQueue = {}
 end
 
 function Client:onMessage(type, data)
-    -- todo
     -- Log:debug("Client received message of type " .. type)
     if type == "snapshot" then
         Log:debug("Received snapshot")
         self.scene:apply(data)
     end
+end
+
+function Client:requestSnapshot()
+    self.client:send("requestSnapshot")
+end
+
+function Client:syncComponent(component)
+    msg = string.format("updateComponent %s",
+        serialize({component.entity.name, component}))
+    self:enqueue(msg)
+end
+
+function Client:enqueue(msg)
+    table.insert(self.msgQueue, msg)
 end

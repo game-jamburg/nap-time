@@ -29,7 +29,13 @@ function Physics:onUpdate(dt)
         self.shape = shape
         self.fixture = love.physics.newFixture(self.body, self.shape, density)
     end
-
+    if self.stale then
+        self:pull()
+    end
     self.entity.transform.position = Vector:new(self.body:getX(), self.body:getY())
     self.entity.transform.rotation = self.body:getAngle()
+end
+
+function Physics:onApply()
+    self.stale = true
 end

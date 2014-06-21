@@ -30,7 +30,7 @@ function love.load(args)
 
 
     isServer = (args[2] == "--server")
-
+    isClient = not isServer
 
     if isServer then
         require "server"

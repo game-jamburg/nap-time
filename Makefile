@@ -1,4 +1,4 @@
-default: run
+default: both
 
 run:
 	love src/

@@ -37,4 +37,7 @@ function Player:onFixedUpdate(dt)
 
     -- tell the physics we changed stuff :)
     self.entity.components.physics:pull()
+    if isClient and not movement:isZero() then
+        client:syncComponent(self.entity.transform)
+    end
 end

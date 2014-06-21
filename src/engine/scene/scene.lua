@@ -88,3 +88,13 @@ function Scene:apply(scene)
         end
     end
 end
+
+function Scene:updateComponent(entityName, component)
+    local entity = self.entities[entityName]
+    if entity then
+        entity.components[component.name] = component
+    else
+        Log:error("Scene:updateComponent", "Component does not exist",
+                  entityName, component)
+    end
+end
