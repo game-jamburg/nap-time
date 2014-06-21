@@ -17,12 +17,14 @@ for line in fileinput.input():
 
 soup = bs4.BeautifulSoup(data, 'xml')
 group = soup.find(id="mesh")
-paths = []
+pathdata = []
 for path in group:
     if type(path) is bs4.element.Tag:
-        paths.append(path["d"])
+        pathdata.append(path["d"])
 
-for path in paths:
+
+paths = []
+for path in pathdata:
     ops = re.split("[ ,]", path)
     points = []
     x = 0
@@ -39,6 +41,6 @@ for path in paths:
             q = points[-1] if relative and points else (0, 0)
             points.append((p[0] + q[0], p[1] + q[1]))
             x += 2
+    paths.append(points)
 
-for point in points:
-    print(point[0], "\t", point[1])
+print("{{" + "},{".join([",".join(["{%s,%s}" % point for point in path]) for path in paths]) + "}}")

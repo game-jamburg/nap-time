@@ -19,14 +19,24 @@
   <defs
      id="defs4">
     <linearGradient
-       inkscape:collect="always"
+       id="linearGradient3859">
+      <stop
+         style="stop-color:#422c18;stop-opacity:1;"
+         offset="0"
+         id="stop3861" />
+      <stop
+         style="stop-color:#2a1e14;stop-opacity:1;"
+         offset="1"
+         id="stop3863" />
+    </linearGradient>
+    <linearGradient
        id="linearGradient3010">
       <stop
          style="stop-color:#4d4d4d;stop-opacity:1;"
          offset="0"
          id="stop3012" />
       <stop
-         style="stop-color:#4d4d4d;stop-opacity:0;"
+         style="stop-color:#8e8e8e;stop-opacity:1;"
          offset="1"
          id="stop3014" />
     </linearGradient>
@@ -40,6 +50,17 @@
        y2="353.07648"
        gradientUnits="userSpaceOnUse"
        gradientTransform="matrix(3.9209722,0,0,3.9209722,-318.22745,-1207.1098)" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3859"
+       id="radialGradient3865"
+       cx="182.25819"
+       cy="583.91963"
+       fx="182.25819"
+       fy="583.91963"
+       r="73.31246"
+       gradientTransform="matrix(1,0,0,2.2590922,0,-735.20867)"
+       gradientUnits="userSpaceOnUse" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -48,9 +69,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.49497475"
-     inkscape:cx="81.449534"
-     inkscape:cy="392.30855"
+     inkscape:zoom="1.4"
+     inkscape:cx="-86.219716"
+     inkscape:cy="163.73712"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -71,7 +92,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -81,15 +102,10 @@
      id="layer1"
      transform="translate(-108.94967,-413.25298)">
     <path
-       style="fill:none;stroke:#000000;stroke-width:3.92097235px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 134.82195,440.20525 c 8.14629,-38.09754 57.13304,-25.66535 93.53825,-8.4021 -23.125,119.02845 49.27905,284.71321 1.9804,302.99968 -38.17909,12.61005 -68.69265,19.39482 -99.7197,3.50088 -10.11728,-56.0245 -40.990192,-86.75359 4.20105,-298.09846 z"
+       style="fill:url(#radialGradient3865);stroke:#000000;stroke-width:3.92097235000000000px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;fill-opacity:1"
+       d="m 134.82195,454.20525 c 8.14629,-38.09754 89.63082,-48.50311 93.53825,-8.4021 11.75925,120.68247 49.27905,270.71321 1.9804,288.99968 -38.17909,12.61005 -68.69265,19.39482 -99.7197,3.50088 -10.11728,-56.0245 -40.990192,-72.75359 4.20105,-284.09846 z"
        id="path2987"
        inkscape:connector-curvature="0"
-       sodipodi:nodetypes="scccs" />
-    <path
-       style="fill:url(#linearGradient3016);fill-opacity:1;stroke:#000000;stroke-width:0.70017362;stroke-opacity:1"
-       d="m 163.54213,744.81084 c -12.45967,-0.68194 -30.08256,-6.05567 -31.0252,-9.46048 -0.1984,-0.71589 -0.73138,-3.03452 -1.18484,-5.15255 -0.4535,-2.11803 -3.14513,-12.83068 -5.98144,-23.80591 -5.58727,-21.62008 -8.00345,-33.28494 -9.71696,-46.91161 -5.97595,-47.52395 -0.4017,-110.46316 17.75056,-200.42387 4.95952,-24.57881 5.98156,-27.49919 11.58486,-33.10245 5.62472,-5.62472 12.66639,-8.02329 23.8243,-8.11516 10.86019,-0.0894 21.63899,1.96876 35.35878,6.7516 7.63511,2.66163 20.3024,7.8341 21.13032,8.62814 0.26153,0.25055 0.17683,2.03114 -0.18743,3.95661 -2.98413,15.76552 -4.30714,51.4492 -2.78918,75.22915 1.7368,27.20747 3.97218,45.36761 11.94183,97.01355 8.48287,54.9718 9.81721,66.39547 9.87175,84.5128 0.051,16.93362 -1.97652,26.25295 -7.12993,32.7725 -3.51923,4.45215 -5.68443,5.50948 -19.99461,9.76377 -14.19341,4.2196 -24.90248,6.64013 -33.84787,7.65045 -10.06917,1.13727 -10.93586,1.16794 -19.60486,0.69346 l 0,0 z"
-       id="path3008"
-       inkscape:connector-curvature="0" />
+       sodipodi:nodetypes="ssccs" />
   </g>
 </svg>

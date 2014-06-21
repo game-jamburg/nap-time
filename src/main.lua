@@ -13,7 +13,9 @@ require "game/level"
 engine = Engine:new()
 
 function love.load()
-    engine.resources:load(Resources.Image, "ship", "data/gfx/ship.png")
+    engine.resources:load(Resources.Image, "target", "data/target.png")
+    engine.resources:load(Resources.Image, "level01", "data/levels/level-01/background.png")
+    engine.resources:load(Resources.Text,  "level01", "data/levels/level-01/mesh.lua")
 
     state = State:new()
 
@@ -36,6 +38,14 @@ function love.load()
     level = state.scene:addEntity(Entity:new("level"))
     ship = level:addComponent(Level:new("ship"))
     
+
+    ball = state.scene:addEntity(Entity:new("ball"))
+    ball.transform.position = Vector:new(100, 100)
+    sprite = ball:addComponent(Sprite:new("sprite", "target"))
+    sprite.scaleFactor = 0.25
+    ball:addComponent(Physics:new("physics", function()
+        return love.physics.newCircleShape(16), 0, 0, 1
+    end))
 
     engine:pushState(state)
 end
