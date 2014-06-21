@@ -2,8 +2,11 @@ socket = require("socket")
 tween = require("engine/external/tween")
 class = require("engine/external/middleclass")
 
+anal = require("engine/external/AnAL")
+
 require "engine"
 require "game/player"
+require "game/animation"
 
 require "game/level"
 
@@ -17,11 +20,19 @@ function love.load()
     state = State:new()
 
     player = state.scene:addEntity(Entity:new("player")) 
+
+    -- Test stuff
+    engine.resources:load(Resources.Image, "playerwalk", "data/gfx/anim/player/walk.png")
+
     playercomponent = player:addComponent(Player:new("player"))
     player:addComponent(SyncTransform:new("SyncTransform"))
 
+    local ani = Animation:new("Animation")
+    ani:create(engine.resources.image.playerwalk, 139, 124, 0.033, 30)
+    player:addComponent(ani)
+
     label = player:addChild(Entity:new("label"))
-    text = label:addComponent(Text:new("text", "Hello World", nil, 30))
+    text = label:addComponent(Text:new("text", "Captain Iglu", nil, 25))
     -- label.transform.global.position = Vector.WindowSize / 2
 
     level = state.scene:addEntity(Entity:new("level"))
