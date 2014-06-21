@@ -58,9 +58,36 @@ function Player:onFixedUpdate(dt)
 end
 
 function Player:onEvent(type, data)
-  if type == "mousereleased" and data.button == "l" then
+  if type == "mousereleased" and data.button == "l" and self.entity.components.slashEndedTimer == nil then
     self.entity.children.upper:addComponent(self.upperSlash)
     self.entity:addComponent(Timer:new("slashEndedTimer", 0.033 * 13, self.slashEnded, {self}))
+
+    local characters = {}
+    for key, entity in pairs(engine:getCurrentState().scene.entities) do
+        if entity:hasComponent(Character) and not entity:hasComponent(Player) then
+            local pos = self.entity.components.transform.position
+
+            local otherPos = entity.components.transform.position - pos
+            local otherDeg = math.atan2(otherPos.x, otherPos.y) + math.pi
+
+            local distance = math.sqrt((otherPos.x)^2+(otherPos.y)^2)
+
+            local mousePos = self.entity.scene.view:toLocal(Mouse.Position) - pos
+            local mouseDeg = math.atan2(mousePos.x, mousePos.y) + math.pi
+
+            local degDiff = math.abs(mouseDeg - otherDeg)
+            local actualDiff = math.min(degDiff, (2*math.pi)-degDiff)
+
+            if distance <= 160 and actualDiff <= 1 then
+                if distance <= 105 and actualDiff <= 0.65 then
+                    -- CRITICAL HIT
+                    entity.components.character:damage(100)
+                else
+                    entity.components.character:damage(50)
+                end
+            end
+        end
+    end
   end
 end
 
