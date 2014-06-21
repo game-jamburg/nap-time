@@ -3,7 +3,6 @@ Animation = class("Animation", Component)
 function Animation:initialize(name)
     Component.initialize(self, name)
     self.order = 1
-    self:addProperty(Property.Integer:new(self, "order"))
 end
 
 function Animation:create(image, fw, fh, delay, frames)
@@ -20,5 +19,5 @@ function Animation:onDraw()
     local rotation = self.entity and self.entity.transform.global.rotation or 0
     local height = self.animation.fh
     local width = self.animation.fw
-    self.animation:draw(position.x-width/2,position.y-height/2,rotation)
+    self.animation:draw(position.x, position.y, rotation, 1, 1, width/2, height/2)
 end
