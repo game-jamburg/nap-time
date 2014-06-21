@@ -134,7 +134,7 @@ function Vector:rotated(phi)
 end
 
 function Vector:angle()
-    return self:signedAngleTo(Vector:new(1, 0))
+    return self:signedAngleTo(Vector:new(0, -1))
 end
 
 function Vector:signedAngleTo(v2)

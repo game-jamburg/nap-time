@@ -47,6 +47,8 @@ function love.load()
         return love.physics.newCircleShape(16), 0, 0, 1
     end))
 
+    playercomponent.target = ball.transform
+
     engine:pushState(state)
 end
 

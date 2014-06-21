@@ -9,7 +9,7 @@ function Player:onAdd(entity)
     self.entity.transform.position = Vector:new(0,0)
 end
 
-
+ 
 function Player:onFixedUpdate(dt)
     -- Reaktion auf gedrueckte Pfeiltasten
     local movement = Vector:new()
@@ -28,8 +28,13 @@ function Player:onFixedUpdate(dt)
     if love.keyboard.isDown("up") then
         movement.y = -1
     end
-
+    
     movement:normalize()
     self.entity.transform.position = self.entity.transform.position + movement *self.speed*dt
+    
+    if self.target then
+        local lookDirection = self.target.position - self.entity.transform.position
+        self.entity.transform.rotation = lookDirection:angle()
+    end
 
 end
