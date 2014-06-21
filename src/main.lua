@@ -14,6 +14,7 @@ require "game/level"
 require "game/positionbymouse"
 require "game/character"
 require "game/menubutton"
+require "game/timer"
 
 engine = Engine:new()
 
@@ -22,6 +23,7 @@ function love.load()
     engine.resources:load(Resources.Image, "blur", "data/blur.png")
     engine.resources:load(Resources.Image, "ninja-walk-lower", "data/gfx/anim/ninja/walk-lower.png")
     engine.resources:load(Resources.Image, "ninja-walk-upper", "data/gfx/anim/ninja/walk-upper.png")
+    engine.resources:load(Resources.Image, "ninja-slash-upper", "data/gfx/anim/ninja/slash-upper.png")
     engine.resources:load(Resources.Image, "level01", "data/levels/level-01/background.png")
     engine.resources:load(Resources.Text,  "level01", "data/levels/level-01/mesh.lua")
 
@@ -52,16 +54,6 @@ function love.load()
     shadow.color = Color:new(0, 0, 0, 0.5)
     shadow.order = 1
     shadow.scaleFactor = 0.3
-
-    local lowerWalk = Animation:new("animation", "ninja-walk-lower", 104, 128, 0.033, 21)
-    lowerWalk.origin = Vector:new(0.6, 0.7)
-    lowerWalk.order = 1
-    player.children.lower:addComponent(lowerWalk)
-
-    local upperWalk = Animation:new("animation", "ninja-walk-upper", 126, 181, 0.033, 21)
-    upperWalk.origin = Vector:new(0.6, 0.7)
-    upperWalk.order = 2
-    player.children.upper:addComponent(upperWalk)
 
     -- Test Enemy
     enemy = state.scene:addEntity(Entity:new("enemy"))

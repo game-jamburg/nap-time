@@ -1,6 +1,6 @@
 Animation = class("Animation", Sprite)
 
-function Animation:initialize(name, image, frameWidth, frameHeight, delay, frames)
+function Animation:initialize(name, image, frameWidth, frameHeight, delay, frames, mode)
     Sprite.initialize(self, name, image)
     self.animation = nil
     self.frameWidth = frameWidth
@@ -13,6 +13,10 @@ function Animation:initialize(name, image, frameWidth, frameHeight, delay, frame
 
     local img = engine.resources.image[self.image]
     self.animation = newAnimation(img, self.frameWidth, self.frameHeight, self.delay, self.frames)
+
+    if mode then
+        self.animation:setMode(mode)
+    end
 end
 
 function Animation:onUpdate(dt)
