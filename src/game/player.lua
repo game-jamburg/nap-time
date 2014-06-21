@@ -37,4 +37,5 @@ function Player:onFixedUpdate(dt)
         self.entity.transform.rotation = lookDirection:angle()
     end
 
+    self.entity.components.physics:pull()
 end

@@ -31,23 +31,16 @@ function love.load()
     ani:create(engine.resources.image.ninjawalk, 90, 128, 0.033, 21)
     player:addComponent(ani)
 
-    label = player:addChild(Entity:new("label"))
-    text = label:addComponent(Text:new("text", "Captain Iglu", nil, 25))
-    -- label.transform.global.position = Vector.WindowSize / 2
-
     level = state.scene:addEntity(Entity:new("level"))
     ship = level:addComponent(Level:new("ship"))
-    
 
-    ball = state.scene:addEntity(Entity:new("ball"))
-    ball.transform.position = Vector:new(100, 100)
-    sprite = ball:addComponent(Sprite:new("sprite", "target"))
+    sprite = player:addComponent(Sprite:new("sprite", "target"))
     sprite.scaleFactor = 0.25
-    ball:addComponent(Physics:new("physics", function()
-        return love.physics.newCircleShape(16), 0, 0, 1
+    player:addComponent(Physics:new("physics", function()
+        return love.physics.newCircleShape(30), 0, 20, 1
     end))
 
-    playercomponent.target = ball.transform
+    -- playercomponent.target = ball.transform
 
     engine:pushState(state)
 end

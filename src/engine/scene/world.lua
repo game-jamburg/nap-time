@@ -44,38 +44,33 @@ function World:debugDraw()
         love.graphics.translate(bx,by)
         love.graphics.rotate(bodyAngle)
 
-    local fixtures = body:getFixtureList()
-    for i=1,#fixtures do
-        local fixture = fixtures[i]
-        local shape = fixture:getShape()
-        local shapeType = shape:getType()
-        local isSensor = fixture:isSensor()
-        local isSleeping = not body:isAwake()
+        local fixtures = body:getFixtureList()
+        for i=1,#fixtures do
+            local fixture = fixtures[i]
+            local shape = fixture:getShape()
+            local shapeType = shape:getType()
+            local isSensor = fixture:isSensor()
+            local isSleeping = not body:isAwake()
 
-        if isSensor then
-            love.graphics.setColor(255,255,0,96)
-        elseif isSleeping then
-            love.graphics.setColor(255,0,0,255)
-        else
-            love.graphics.setColor(0, 255,0,255)
-        end
+            if isSensor then
+                love.graphics.setColor(255,255,0,96)
+            elseif isSleeping then
+                love.graphics.setColor(255,0,0,255)
+            else
+                love.graphics.setColor(0, 255,0,255)
+            end
 
-        love.graphics.setLineWidth(1)
-        if (shapeType == "circle") then
-            local x,y = fixture:getMassData() --0.9.0 missing circleshape:getPoint()
-            --local x,y = shape:getPoint() --0.9.1
-            local radius = shape:getRadius()
-            love.graphics.circle("line",x,y,radius)
-        elseif (shapeType == "polygon") then
-            local points = {shape:getPoints()}
-            love.graphics.polygon("fill",points)
-            love.graphics.setColor(0,0,0,255)
-            love.graphics.polygon("line",points)
-        elseif (shapeType == "edge") then
-            love.graphics.setColor(0,0,0,255)
-            love.graphics.line(shape:getPoints())
+            love.graphics.setLineWidth(1)
+            if (shapeType == "circle") then
+                local x,y = shape:getPoint() --0.9.1
+                local radius = shape:getRadius()
+                love.graphics.circle("line",x,y,radius)
+            elseif (shapeType == "polygon") then
+                local points = {shape:getPoints()}
+                love.graphics.polygon("line",points)
+            elseif (shapeType == "edge") then
+                love.graphics.line(shape:getPoints())
             elseif (shapeType == "chain") then
-                love.graphics.setColor(0,0,0,255)
                 love.graphics.line(shape:getPoints())
             end
         end
