@@ -3,6 +3,7 @@ Character = class("Character", Component)
 --[[
     
     * Entity
+      > player: Player
       > character: Character
       > shadow: Sprite
       * lower: LowerBody

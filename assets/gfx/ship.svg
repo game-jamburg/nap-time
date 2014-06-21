@@ -17,8 +17,8 @@
    inkscape:version="0.48.4 r9939"
    sodipodi:docname="ship.svg"
    inkscape:export-filename="/home/paul/src/nap-time/src/data/levels/level-01/background.png"
-   inkscape:export-xdpi="89.969025"
-   inkscape:export-ydpi="89.969025">
+   inkscape:export-xdpi="90"
+   inkscape:export-ydpi="90">
   <defs
      id="defs3079">
     <linearGradient
@@ -51,11 +51,11 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.24748737"
-     inkscape:cx="2532.553"
-     inkscape:cy="2281.4563"
+     inkscape:zoom="0.35"
+     inkscape:cx="1943.8986"
+     inkscape:cy="2392.7673"
      inkscape:document-units="px"
-     inkscape:current-layer="layer1"
+     inkscape:current-layer="mesh"
      showgrid="false"
      inkscape:window-width="1916"
      inkscape:window-height="1015"
@@ -113,6 +113,12 @@
          d="m 168.026,3981.6817 -4.75246,-1119.3447 166.33618,-310.6035 -9.50491,-410.231 -147.32635,-269.5804 0,-750.1367 318.41498,-574.3235 513.26586,-392.6497 594.0578,421.9519 275.6429,486.4168 38.0196,773.5786 -142.5738,316.4639 -4.7525,380.9288 118.8116,363.3475 0,1078.3215 z"
          style="fill:none;stroke:#000000;stroke-width:3.69421864px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
          sodipodi:nodetypes="cccccccccccccccc" />
+      <path
+         style="fill:#ffff00;fill-opacity:1;stroke:#ffce00;stroke-width:4;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+         d="m 1271.5447,866.96201 c -12.5526,0 -24.5105,2.9401 -35.3866,8.2569 -10.8761,5.3167 -20.6703,13.0101 -28.8954,22.5166 -8.2252,9.5065 -14.8812,20.8262 -19.481,33.3955 -4.5998,12.5693 -7.1433,26.3883 -7.1433,40.8935 0,14.5051 2.5435,28.32219 7.1433,40.88859 4.5998,12.5664 11.2558,23.8821 19.481,33.3848 8.2251,9.5026 18.0193,17.192 28.8954,22.5058 10.8761,5.3138 22.834,8.252 35.3866,8.252 12.5526,0 24.5124,-2.9382 35.3914,-8.252 10.879,-5.3138 20.6771,-13.0032 28.9061,-22.5058 8.2291,-9.5027 14.889,-20.8184 19.4917,-33.3848 4.6028,-12.5664 7.1482,-26.38349 7.1482,-40.88859 0,-14.5052 -2.5455,-28.3242 -7.1482,-40.8935 -4.6027,-12.5693 -11.2626,-23.889 -19.4917,-33.3955 -8.229,-9.5065 -18.0271,-17.1999 -28.9061,-22.5166 -10.879,-5.3168 -22.8388,-8.2569 -35.3914,-8.2569 z m -822.2501,311.12499 0,206.0624 173.75,0 0,-206.0624 z m 678.8125,363.6562 0,177.7812 109.0938,0 0,262.6563 319.2188,0 0,-331.3437 -246.4688,0 0,-109.0938 z"
+         id="rect3000"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="ssssssssssssssssscccccccccccccc" />
     </g>
   </g>
 </svg>
