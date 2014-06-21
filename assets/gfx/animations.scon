@@ -13,36 +13,11 @@
 								"object_ref": [
 									{
 										"id": 0,
-										"key": 1,
-										"timeline": "1",
-										"z_index": "0"
-									},
-									{
-										"id": 1,
 										"key": 0,
 										"timeline": "0",
-										"z_index": "1"
+										"z_index": "0"
 									}
 								]
-							},
-							{
-								"bone_ref": [],
-								"id": 1,
-								"object_ref": [
-									{
-										"id": 0,
-										"key": 3,
-										"timeline": "1",
-										"z_index": "0"
-									},
-									{
-										"id": 1,
-										"key": 0,
-										"timeline": "0",
-										"z_index": "1"
-									}
-								],
-								"time": 496
 							}
 						]
 					},
@@ -57,85 +32,22 @@
 									"object": {
 										"file": 0,
 										"folder": 0,
-										"pivot_x": 0.02710376871450697,
-										"pivot_y": 0.9747396837639799,
-										"scale_x": 1.576234727241439,
-										"scale_y": 1.5873844299890258,
-										"x": -1569.6689480243579,
-										"y": 2276.3030380940136
+										"scale_x": 0.5574162679425837,
+										"scale_y": 0.5566176092169319,
+										"x": -64.22129186602874,
+										"y": 70
 									},
 									"spin": 0
 								}
 							],
-							"name": "pirate-hat"
-						},
-						{
-							"id": 1,
-							"key": [
-								{
-									"id": 0,
-									"object": {
-										"file": 1,
-										"folder": 0,
-										"scale_x": 1.5057277628032344,
-										"scale_y": 1.5061863297291902,
-										"x": 579.2752950165268,
-										"y": -267.1504750082775
-									},
-									"spin": -1
-								},
-								{
-									"id": 1,
-									"object": {
-										"file": 1,
-										"folder": 0,
-										"scale_x": 1.5057277628032344,
-										"scale_y": 1.5061863297291902,
-										"x": 314.53857816711593,
-										"y": 1757.1428571428567
-									},
-									"spin": -1
-								},
-								{
-									"id": 2,
-									"object": {
-										"angle": 346.9813316665438,
-										"file": 1,
-										"folder": 0,
-										"pivot_x": 0,
-										"pivot_y": 1,
-										"scale_x": 1.5281895777178789,
-										"scale_y": 1.1388549475388416,
-										"x": 683.3527281876853,
-										"y": 1252.2872851563204
-									},
-									"spin": -1,
-									"time": 496
-								},
-								{
-									"id": 3,
-									"object": {
-										"angle": 346.9813316665438,
-										"file": 1,
-										"folder": 0,
-										"pivot_x": 0.2768815358326922,
-										"pivot_y": 0.06667639276009041,
-										"scale_x": 1.5281895777178789,
-										"scale_y": 1.1388549475388416,
-										"x": 600.3354273538914,
-										"y": -299.502725150144
-									},
-									"time": 496
-								}
-							],
-							"name": "arm"
+							"name": "ninja-head_000"
 						}
 					]
 				}
 			],
 			"character_map": [],
 			"id": 0,
-			"name": "player",
+			"name": "ninja",
 			"obj_info": []
 		}
 	],
@@ -143,24 +55,24 @@
 		{
 			"file": [
 				{
-					"height": 2592,
+					"height": 202,
 					"id": 0,
-					"name": "svg/pirate-hat.svg",
+					"name": "svg/player/ninja-head.svg",
 					"pivot_x": 0,
 					"pivot_y": 1,
-					"width": 1936
+					"width": 208
 				},
 				{
-					"height": 1440,
+					"height": 86,
 					"id": 1,
-					"name": "svg/arm.svg",
+					"name": "svg/player/upper-leg.svg",
 					"pivot_x": 0,
 					"pivot_y": 1,
-					"width": 635
+					"width": 36
 				}
 			],
 			"id": 0,
-			"name": "svg"
+			"name": "svg/player"
 		}
 	],
 	"generator": "BrashMonkey Spriter",
