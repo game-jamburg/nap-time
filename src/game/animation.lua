@@ -9,7 +9,7 @@ function Animation:initialize(name, image, frameWidth, frameHeight, delay, frame
     self.frames = frames
 
     self.speed = 1
-    self:addProperty(Property.Integer:new(self, "order"))
+    self:addProperty(Property.Number:new(self, "speed"))
 
     local img = engine.resources.image[self.image]
     self.animation = newAnimation(img, self.frameWidth, self.frameHeight, self.delay, self.frames)
@@ -17,7 +17,7 @@ end
 
 function Animation:onUpdate(dt)
     Drawable.onUpdate(self, dt)
-    self.animation:update(dt)
+    self.animation:update(dt * self.speed)
 end
 
 function Animation:onDraw()

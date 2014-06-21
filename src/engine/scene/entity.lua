@@ -71,7 +71,7 @@ function Entity:addChild(entity)
         self.scene:addEntity(entity)
     end
     entity.parent = self
-    table.insert(self.children, entity)
+    self.children[entity.name] = entity
     return entity
 end
 
