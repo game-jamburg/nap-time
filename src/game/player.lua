@@ -2,23 +2,22 @@ Player = class("Player", Component)
 
 function Player:initialize(name)
     self.speed = 600
-    Component.initialize(self, name)
 
-    self.upperSlash = Animation:new("animation", "ninja-slash-upper", 340, 229, 0.033, 13, "once")
-    self.upperSlash.origin = Vector:new(0.48, 0.84)
-    self.upperSlash.order = 2
+    self.attacking = false
+
+    Component.initialize(self, name)
 end
 
 function Player:onAdd(entity)
-    self.lowerWalk = Animation:new("animation", "ninja-walk-lower", 104, 128, 0.033, 21)
-    self.lowerWalk.origin = Vector:new(0.6, 0.7)
-    self.lowerWalk.order = 1
-    entity.children.lower:addComponent(self.lowerWalk)
+    self.lowerAnimation = Animation:new("animation", "ninja-walk-lower")
+    self.lowerAnimation.origin = Vector:new(0.6, 0.7)
+    self.lowerAnimation.order = 1
+    entity.children.lower:addComponent(self.lowerAnimation)
 
-    self.upperWalk = Animation:new("animation", "ninja-walk-upper", 126, 181, 0.033, 21)
-    self.upperWalk.origin = Vector:new(0.6, 0.7)
-    self.upperWalk.order = 2
-    entity.children.upper:addComponent(self.upperWalk)
+    self.upperAnimation = Animation:new("animation", "ninja-walk-upper")
+    self.upperAnimation.origin = Vector:new(0.6, 0.7)
+    self.upperAnimation.order = 2
+    entity.children.upper:addComponent(self.upperAnimation)
 
     self.movement = Vector:new()
 end
@@ -65,29 +64,34 @@ function Player:onFixedUpdate(dt)
 end
 
 function Player:onEvent(type, data)
-  if type == "mousereleased" and data.button == "l" and self.entity.components.slashEndedTimer == nil then
-    self.entity.children.upper:addComponent(self.upperSlash)
-    self.entity:addComponent(Timer:new("slashEndedTimer", 0.033 * 13, self.slashEnded, {self}))
+    if type == "mousereleased" and data.button == "l" and not self.attacking then
+        self.attacking = true
+        self.upperAnimation.animation = "ninja-slash-upper"
+        self.upperAnimation.origin = Vector:new(0.48, 0.74)
+        wait(0.033 * 13, function() self:attackEnded() end)
+        self:strike()
+    end
+end
 
-    local characters = {}
+function Player:strike()
     for key, entity in pairs(engine:getCurrentState().scene.entities) do
-        if entity:hasComponent(Character) and not entity:hasComponent(Player) then
+        if entity:hasComponent(character) and not entity:hasComponent(player) then
             local pos = self.entity.components.transform.position
 
-            local otherPos = entity.components.transform.position - pos
-            local otherDeg = math.atan2(otherPos.x, otherPos.y) + math.pi
+            local otherpos = entity.components.transform.position - pos
+            local otherdeg = math.atan2(otherpos.x, otherpos.y) + math.pi
 
-            local distance = math.sqrt((otherPos.x)^2+(otherPos.y)^2)
+            local distance = math.sqrt((otherpos.x)^2+(otherpos.y)^2)
 
-            local mousePos = self.entity.scene.view:toLocal(Mouse.Position) - pos
-            local mouseDeg = math.atan2(mousePos.x, mousePos.y) + math.pi
+            local mousepos = self.entity.scene.view:toLocal(mouse.position) - pos
+            local mousedeg = math.atan2(mousepos.x, mousepos.y) + math.pi
 
-            local degDiff = math.abs(mouseDeg - otherDeg)
-            local actualDiff = math.min(degDiff, (2*math.pi)-degDiff)
+            local degdiff = math.abs(mousedeg - otherdeg)
+            local actualdiff = math.min(degdiff, (2*math.pi)-degdiff)
 
-            if distance <= 160 and actualDiff <= 1 then
-                if distance <= 105 and actualDiff <= 0.65 then
-                    -- CRITICAL HIT
+            if distance <= 160 and actualdiff <= 1 then
+                if distance <= 105 and actualdiff <= 0.65 then
+                    -- critical hit
                     entity.components.character:damage(100)
                 else
                     entity.components.character:damage(50)
@@ -95,10 +99,12 @@ function Player:onEvent(type, data)
             end
         end
     end
-  end
 end
 
-function Player:slashEnded()
-    self.upperSlash.animation:reset()
-    self.entity.children.upper:addComponent(self.upperWalk)
+function Player:attackEnded()
+    self.attacking = false
+    self.lowerAnimation.animation = "ninja-walk-lower"
+    self.upperAnimation.animation = "ninja-walk-upper"
+    self.lowerAnimation.origin = Vector:new(0.6, 0.7)
+    self.upperAnimation.origin = Vector:new(0.6, 0.7)
 end
