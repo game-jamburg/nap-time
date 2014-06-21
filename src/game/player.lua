@@ -1,7 +1,7 @@
 Player = class("Player", Component)
 
 function Player:initialize(name)
-    self.speed = 400
+    self.speed = 600
     Component.initialize(self, name)
 end
  
