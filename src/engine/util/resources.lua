@@ -4,6 +4,7 @@ function Resources:initialize()
     self.image = {}
     self.font = {}
     self.sound = {}
+    self.text = {}
 end
 
 function Resources:load(type, name, path)
@@ -17,6 +18,8 @@ function Resources:load(type, name, path)
         res = Font:new(path)
     elseif type == Resources.Sound then
         res = love.sound.newSoundData(path)
+    elseif type == Resources.Text then
+        res = love.filesystem.read(path)
     else
         print("Unknown resource type '" .. type .. "' for resource '" .. name .. "' at '" .. path .. "'.")
         return nil
@@ -26,13 +29,10 @@ function Resources:load(type, name, path)
     return res
 end
 
-function Resources:loadList(list)
-    -- load stuff from a file list
-end
-
 Resources.static.Image = "image"
 Resources.static.Font = "font"
 Resources.static.Sound = "sound"
+Resources.static.Text = "text"
 
 -- function Resources:makeSound(name)
 --     return love.audio.newSource(self.sounds[name])

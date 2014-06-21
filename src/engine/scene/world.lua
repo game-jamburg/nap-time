@@ -1,86 +1,17 @@
-require("engine/scene/view")
-
-World = class("World", View)
+World = class("World")
 
 function World:initialize()
-    View.initialize(self, View.default)
-    self.entities = {}
-
-    love.physics.setMeter(1)
-    self.physicsWorld = love.physics.newWorld(0, 40, false)
+    love.physics.setMeter(64)
+    self.physicsWorld = love.physics.newWorld(0, 64*9.81, false)
     self.physicsWorld:setCallbacks(function(a, b, coll) self:beginContact(a, b, coll) end,
                                    function(a, b, coll) self:endContact(a, b, coll) end,
                                    function(a, b, coll) self:preSolve(a, b, coll) end,
                                    function(a, b, coll) self:postSolve(a, b, coll) end)
 end
 
-function World:add(entity)
-    table.insert(self.entities, entity)
-    entity.world = self
-    entity:onAdd()
-end
-
-function World:clear()
-    for k,v in pairs(self.entities) do
-        v:kill()
-    end
-end
-
-function World:remove(entity)
-    entity:kill()
-end
-
-function World:handleEvent(type, data)
-    for k,v in pairs(self.entities) do
-        if v:onEvent(type, data) then
-            return true
-        end
-    end
-end
-
-function World:removeDead()
-    for k,v in pairs(self.entities) do
-        if v.dead then
-            v:onRemove()
-            table.remove(self.entities, k)
-            v.world = nil
-            if v.physicsObject and v.physicsObject.body then
-                v.physicsObject.body:destroy()
-            end
-        end
-    end
-end
-
 function World:update(dt)
-    self:removeDead()
-
-    for k, v in pairs(self.entities) do
-        v:update(dt)
-    end
-
     self.physicsWorld:update(dt)
-    table.sort(self.entities, function(a, b) return a.z > b.z end)
 end
-
-function World:draw()
-    self:push()
-    for k, v in pairs(self.entities) do
-        v:draw()
-    end
-    self:pop()
-end
-
-function World:findByType(typename, matchChildren)
-    l = {}
-    for k, v in pairs(self.entities) do
-        if (v.__name == typename) or (matchChildren and inherits(v, typename)) then
-            table.insert(l, v)
-        end
-    end
-    return l
-end
-
--- callbacks
 
 function World:beginContact(a, b, coll)
     local uA = a:getUserData()
@@ -100,4 +31,85 @@ function World:preSolve(a, b, coll)
 end
 
 function World:postSolve(a, b, coll)
+end
+
+
+function World:debugDraw()
+    local bodies = self.physicsWorld:getBodyList()
+    for b=#bodies,1,-1 do
+        local body = bodies[b]
+        local bx,by = body:getPosition()
+        local bodyAngle = body:getAngle()
+        love.graphics.push()
+        love.graphics.translate(bx,by)
+        love.graphics.rotate(bodyAngle)
+
+    local fixtures = body:getFixtureList()
+    for i=1,#fixtures do
+        local fixture = fixtures[i]
+        local shape = fixture:getShape()
+        local shapeType = shape:getType()
+        local isSensor = fixture:isSensor()
+        local isSleeping = not body:isAwake()
+
+        if isSensor then
+            love.graphics.setColor(255,255,0,96)
+        elseif isSleeping then
+            love.graphics.setColor(255,0,0,255)
+        else
+            love.graphics.setColor(0, 255,0,255)
+        end
+
+        love.graphics.setLineWidth(1)
+        if (shapeType == "circle") then
+            local x,y = fixture:getMassData() --0.9.0 missing circleshape:getPoint()
+            --local x,y = shape:getPoint() --0.9.1
+            local radius = shape:getRadius()
+            love.graphics.circle("line",x,y,radius)
+        elseif (shapeType == "polygon") then
+            local points = {shape:getPoints()}
+            love.graphics.polygon("fill",points)
+            love.graphics.setColor(0,0,0,255)
+            love.graphics.polygon("line",points)
+        elseif (shapeType == "edge") then
+            love.graphics.setColor(0,0,0,255)
+            love.graphics.line(shape:getPoints())
+            elseif (shapeType == "chain") then
+                love.graphics.setColor(0,0,0,255)
+                love.graphics.line(shape:getPoints())
+            end
+        end
+        love.graphics.pop()
+    end
+
+    local joints = self.physicsWorld:getJointList()
+    for index,joint in pairs(joints) do
+        love.graphics.setColor(0,255,0,255)
+        local x1,y1,x2,y2 = joint:getAnchors()
+        if (x1 and x2) then
+            love.graphics.setLineWidth(3)
+            love.graphics.line(x1,y1,x2,y2)
+        else
+            love.graphics.setPointSize(3)
+            if (x1) then
+                love.graphics.point(x1,y1)
+            end
+            if (x2) then
+                love.graphics.point(x2,y2)
+            end
+        end
+    end
+
+    local contacts = self.physicsWorld:getContactList()
+    for i=1,#contacts do
+        love.graphics.setColor(255,0,0,255)
+        love.graphics.setPointSize(3)
+        local x1,y1,x2,y2 = contacts[i]:getPositions()
+        if (x1) then
+            love.graphics.point(x1,y1)
+        end
+        if (x2) then
+            love.graphics.point(x2,y2)
+        end
+    end
 end

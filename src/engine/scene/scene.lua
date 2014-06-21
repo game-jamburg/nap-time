@@ -4,6 +4,7 @@ function Scene:initialize()
     self.state = nil
     self.name = "unnamed_scene"
     self.view = View.default
+    self.world = World:new()
 end
 
 function Scene:restore(data)
@@ -27,12 +28,14 @@ function Scene:addEntity(entity)
     end
 
     table.insert(self.entities, entity)
+    entity.scene = self
     entity:onAdd(self)
     return entity
 end
 
 function Scene:update(dt)
     self.time = self.time + dt
+    self.world:update(dt) -- physics
     for k, v in pairs(self.entities) do
         v:update(dt)
     end
