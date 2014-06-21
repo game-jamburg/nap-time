@@ -28,7 +28,6 @@ function love.load(args)
     engine.resources:load(Resources.Text,  "level01", "data/levels/level-01/mesh.lua")
 
 
-
     isServer = (args[2] == "--server")
     isClient = not isServer
 
@@ -56,6 +55,9 @@ function initLevel()
     player.transform.position = Vector:new(1000, 2000)
     player:addComponent(Character:new("character", "Ninj'arrr"))
     player:addComponent(Physics:new("physics", function() return love.physics.newCircleShape(30), 0, 20, 1 end))
+    player:addComponent(Player:new("player"))
+    player:addComponent(Camera:new("playercam"))
+
 
     -- Test Enemy
     enemy = state.scene:addEntity(Entity:new("enemy"))
@@ -67,10 +69,9 @@ function initLevel()
     mousegui = mouseTarget:addComponent(MouseGUI:new("mousegui", "target"))
     mousegui.scale = Vector:new(0.2,0.2)
     mouseTarget:addComponent(PositionByMouse:new("positionbymouse"))
-    -- player.components.player.target = mouseTarget.transform
-
-    player:addComponent(Player:new("player"))
-    player:addComponent(Camera:new("playercam"))
+    if isClient then
+        player.components.player.target = mouseTarget.transform
+    end
 
     shadow = player:addComponent(Sprite:new("shadow", "blur"))
     shadow.color = Color:new(0, 0, 0, 0.5)

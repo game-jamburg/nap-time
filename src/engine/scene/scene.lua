@@ -94,7 +94,15 @@ function Scene:updateComponent(entityName, component)
     if entity then
         entity.components[component.name] = component
     else
-        Log:error("Scene:updateComponent", "Component does not exist",
-                  entityName, component)
+        Log:error("Scene:updateComponent", "Does not exist", entityName, component)
+    end
+end
+
+function Scene:updateEntity(name, data)
+    local entity = self.entities[name]
+    if entity then
+        entity:apply(data)
+    else
+        Log:error("Scene:updateEntity", "Does not exist", name)
     end
 end

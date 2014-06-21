@@ -31,6 +31,7 @@ function Physics:onUpdate(dt)
     end
     if self.stale then
         self:pull()
+        self.stale = false
     end
     self.entity.transform.position = Vector:new(self.body:getX(), self.body:getY())
     self.entity.transform.rotation = self.body:getAngle()

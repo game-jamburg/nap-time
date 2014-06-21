@@ -69,6 +69,8 @@ function Server:onMessage(id, type, data)
         self:sendSnapshot(id)
     elseif type == "updateComponent" then
         self.scene:updateComponent(data[1], data[2])
+    elseif type == "updateTopLevelEntity" then
+        self.scene:updateEntity(data[1], data[2])
     end
     Log:verbose("Recieved " .. type .. " from client " .. id)
 end
@@ -135,6 +137,13 @@ function Client:syncComponent(component)
     self:enqueue(msg)
 end
 
+function Client:syncTopLevelEntity(entity)
+    msg = string.format("updateTopLevelEntity %s",
+        serialize({entity.name, entity}))
+    self:enqueue(msg)
+end
+
 function Client:enqueue(msg)
+    Log:verbose("Enqueued message", msg)
     table.insert(self.msgQueue, msg)
 end
