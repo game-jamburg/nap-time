@@ -68,14 +68,11 @@ function Engine:update(dt)
     end
 end
 
-function Engine:fixedupdate(dt)
-    self:getCurrentState():fixedupdate(dt)
-end
-
 function Engine:draw() 
     local view = self:getCurrentState().scene.view
     view:push()
     self.renderer:render()
+    self:getCurrentState().scene.world:debugDraw()
     View:popAll()
     self:renderGUI()
 end
@@ -96,12 +93,6 @@ function Engine:subscribe()
     love.update = function(dt)
         if update then update(dt) end
         self:update(dt)
-    end
-    
-    local f_update = fixedupdate
-    fixedupdate = function(dt)
-        if f_update then f_update(dt) end
-        self:fixedupdate(dt)
     end
 
     local draw = love.draw
