@@ -1,3 +1,4 @@
+socket = require("socket")
 tween = require("engine/external/tween")
 class = require("engine/external/middleclass")
 
@@ -15,6 +16,7 @@ function love.load()
 
     player = state.scene:addEntity(Entity:new("player")) 
     playercomponent = player:addComponent(Player:new("player"))
+    player:addComponent(SyncTransform:new("SyncTransform"))
 
 
     label = player:addChild(Entity:new("label"))
@@ -23,6 +25,7 @@ function love.load()
 
     level = state.scene:addEntity(Entity:new("level"))
     ship = level:addComponent(Level:new("ship"))
+    
 
     engine:pushState(state)
 end
