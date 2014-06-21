@@ -21,7 +21,7 @@ function Synchronized:onUpdate(dt)
                 local time = string.format("%.03f", Time.Global)
                 local msg = string.format("%s %s %s %s %s",
                     time, self.entity.name, componentName, prop, serialize(value))
-                Log:debug("Sync " .. msg)
+                -- Log:debug("Sync " .. msg)
                 self.socket:send(msg)
             end
         end

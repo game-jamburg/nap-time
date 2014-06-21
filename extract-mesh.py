@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import bs4, re
+import bs4, re, sys
 
 def is_number(s):
     try:
@@ -34,11 +34,11 @@ for path in pathdata:
             if ops[x].lower() == 'z':
                 points.append(points[0])
             else:
-                relative = ops[x][0] < 'A'
+                relative = ord(ops[x][0]) >= ord('a')
             x += 1
         else:
             p = (float(ops[x]), float(ops[x+1]))
-            q = points[-1] if relative and points else (0, 0)
+            q = points[-1] if (relative and points) else (0, 0)
             points.append((p[0] + q[0], p[1] + q[1]))
             x += 2
     paths.append(points)
