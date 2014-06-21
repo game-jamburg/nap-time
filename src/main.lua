@@ -19,7 +19,8 @@ engine = Engine:new()
 function love.load()
     engine.resources:load(Resources.Image, "target", "data/target.png")
     engine.resources:load(Resources.Image, "blur", "data/blur.png")
-    engine.resources:load(Resources.Image, "ninjawalk", "data/gfx/anim/ninja-walk.png")
+    engine.resources:load(Resources.Image, "ninja-walk-lower", "data/gfx/anim/ninja/walk-lower.png")
+    engine.resources:load(Resources.Image, "ninja-walk-upper", "data/gfx/anim/ninja/walk-upper.png")
     engine.resources:load(Resources.Image, "level01", "data/levels/level-01/background.png")
     engine.resources:load(Resources.Text,  "level01", "data/levels/level-01/mesh.lua")
 
@@ -51,9 +52,15 @@ function love.load()
     shadow.order = 1
     shadow.scaleFactor = 0.3
 
-    local animation = Animation:new("Animation", "ninjawalk", 90, 128, 0.033, 21)
-    animation.origin = Vector:new(0.6, 0.7)
-    player.children.lower:addComponent(animation)
+    local lowerWalk = Animation:new("Animation", "ninja-walk-lower", 103, 128, 0.033, 21)
+    lowerWalk.origin = Vector:new(0.6, 0.7)
+    lowerWalk.order = 1
+    player.children.lower:addComponent(lowerWalk)
+
+    local upperWalk = Animation:new("Animation", "ninja-walk-upper", 126, 181, 0.033, 21)
+    upperWalk.origin = Vector:new(0.6, 0.7)
+    upperWalk.order = 2
+    player.children.upper:addComponent(upperWalk)
 
     -- Test Enemy
     enemy = state.scene:addEntity(Entity:new("enemy"))
