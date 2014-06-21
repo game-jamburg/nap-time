@@ -38,6 +38,12 @@ function Entity:fixedupdate(dt)
     end
 end
 
+function Entity:renderGUI()
+    for i, component in pairs(self.components) do
+        component:renderGUI()
+    end
+end
+
 function Entity:onEvent(type, data) 
     for i, component in pairs(self.components) do
         if component:onEvent(type, data) then return true end

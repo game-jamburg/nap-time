@@ -76,6 +76,12 @@ function Engine:draw()
     view:push()
     self.renderer:render()
     View:popAll()
+    self:renderGUI()
+end
+
+function Engine:renderGUI()
+    Color.White:set()
+    self:getCurrentState():renderGUI()
 end
 
 function Engine:handleEvent(type, data) 

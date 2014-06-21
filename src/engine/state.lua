@@ -33,6 +33,10 @@ function State:fixedupdate(dt)
     self.scene:fixedupdate(dt)
 end
 
+function State:renderGUI()
+    self.scene:renderGUI()
+end
+
 function State:handleEvent(type, data)
     if self:onEvent(type, data) then return true end
     if self.scene:handleEvent(type, data) then return true end
