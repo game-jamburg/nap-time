@@ -12,9 +12,9 @@ end
 View.static.currentView = nil
 View.static.default = View:new()
 
-function View.static.makeDefaultView(size)
-    View.default.translate = size * 0.5 
-    View.default.scale = Vector:new(size.y, size.y)
+function View.static.makeDefaultView(windowSize, size)
+    View.default.translate = windowSize * 0.5 
+    View.default.scale = Vector:new(1/windowSize.y, 1/windowSize.y) * size
 end
 
 function View.static.popUntil(view)

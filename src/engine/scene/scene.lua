@@ -3,6 +3,7 @@ function Scene:initialize()
     self.entities = {}
     self.state = nil
     self.name = "unnamed_scene"
+    self.view = View.default
 end
 
 function Scene:restore(data)

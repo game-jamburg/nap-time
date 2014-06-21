@@ -10,6 +10,7 @@ function Engine:initialize()
 
     self.states = {}
     self.renderer = Renderer:new()
+    self.guirenderer = Renderer:new()
     self.resources = Resources()
 
     self:updateGlobals(0)
@@ -44,6 +45,8 @@ function Engine:updateGlobals(dt)
     -- update window size
     Vector.WindowSize.x = love.graphics.getWidth()
     Vector.WindowSize.y = love.graphics.getHeight()
+    
+    View.makeDefaultView(Vector.WindowSize, 500)
 
     -- update mouse position
     Mouse.Position.x = love.mouse.getX()
@@ -70,7 +73,16 @@ function Engine:fixedupdate(dt)
 end
 
 function Engine:draw() 
+    local view = self:getCurrentState().scene.view
+    view:push()
     self.renderer:render()
+    View:popAll()
+    self:renderGUI()
+end
+
+function Engine:renderGUI()
+    Color.White:set()
+    self.guirenderer:render()
 end
 
 function Engine:handleEvent(type, data) 

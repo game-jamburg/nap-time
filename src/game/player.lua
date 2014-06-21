@@ -6,7 +6,7 @@ function Player:initialize(name)
 end
 
 function Player:onAdd(entity)
-    self.entity.transform.position = Vector:new(500,500)
+    self.entity.transform.position = Vector:new(0,0)
 end
 
 
