@@ -46,7 +46,7 @@ function Engine:updateGlobals(dt)
     Vector.WindowSize.x = love.graphics.getWidth()
     Vector.WindowSize.y = love.graphics.getHeight()
     
-    View.makeDefaultView(Vector.WindowSize, 300)
+    View.makeDefaultView(Vector.WindowSize, 500)
 
     -- update mouse position
     Mouse.Position.x = love.mouse.getX()

@@ -1,8 +1,7 @@
-Animation = class("Animation", Component)
+Animation = class("Animation", Drawable)
 
 function Animation:initialize(name)
-    Component.initialize(self, name)
-    self.order = 1
+    Drawable.initialize(self, name)
 end
 
 function Animation:create(image, fw, fh, delay, frames)
@@ -10,7 +9,7 @@ function Animation:create(image, fw, fh, delay, frames)
 end
 
 function Animation:onUpdate(dt)
-    engine.renderer:queue(self, self.order)
+    Drawable.onUpdate(self, dt)
     self.animation:update(dt)
 end
 

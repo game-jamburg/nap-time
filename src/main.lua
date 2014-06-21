@@ -68,7 +68,7 @@ function love.update(dt)
 end
 
 function love.draw()
-    love.graphics.setBackgroundColor(100, 100, 100)
+    love.graphics.setBackgroundColor(150, 150, 150)
 end
 
 -- fixed timestep stuff
