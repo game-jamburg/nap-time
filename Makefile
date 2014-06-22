@@ -24,3 +24,12 @@ three:
 	sleep 0.2
 	love src/ &
 
+four:
+	love src/ --server&
+	sleep 0.2
+	love src/ &
+	sleep 0.2
+	love src/ &
+	sleep 0.2
+	love src/ &
+
