@@ -30,8 +30,8 @@ function Component:restore(data)
     end
 end
 
-function Component:serialize(depth)
-    return 'define(' .. self.class.name .. ') ' .. serialize(self.name) .. ' ' .. serialize(self.properties, depth)
+function Component:serialize(depth, filter)
+    return 'define(' .. self.class.name .. ') ' .. serialize(self.name, 0, filter) .. ' ' .. serialize(self.properties, depth, filter)
 end
 
 function Component:onAdd(entity) end

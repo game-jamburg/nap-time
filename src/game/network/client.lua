@@ -3,6 +3,8 @@ Client = class("Client", GameState)
 function Client:initialize()
     GameState.initialize(self)
     self.timeSinceLastSnapshot = 0
+    --self.sendInterval = 0
+    --self.timeSinceLastSend = 0
 end
 
 function Client:send(data)
@@ -33,7 +35,7 @@ end
 
 function Client:preUpdate(dt)
     self.client:update(dt)
-    if self.timeSinceLastSnapshot > 1 then
+    if self.timeSinceLastSnapshot > 2 then
         self:requestSnapshot()
         self.timeSinceLastSnapshot = 0
     else
@@ -42,7 +44,11 @@ function Client:preUpdate(dt)
 end
 
 function Client:postUpdate(dt)
-    self:sendQueue()
+    --self.timeSinceLastSend = self.timeSinceLastSend + dt
+    --if self.timeSinceLastSend > self.sendInterval then
+        self:sendQueue()
+    --    self.timeSinceLastSend = 0
+    --end
 end
 
 function Client:onMessage(type, data)
@@ -59,6 +65,7 @@ function Client:onMessage(type, data)
         if data[1] == self.playerName then
             self.playerEntity = self.scene.entities[self.playerName]
             if not self.playerEntity.components.player then
+                Log:debug("Add player component to " .. self.playerName)
                 player = self.playerEntity:addComponent(Player:new("player"))
 
                 -- also, add the mouse target stuff
@@ -77,25 +84,25 @@ function Client:onMessage(type, data)
         if not self.playerName then
             Log:info("You are now '" .. data .. "'")
             self.playerName = data
-        else
+        elseif self.playerName ~= data then
             Log:error("Recieved additional welcome", data)
         end
     end
 end
 
 function Client:requestSnapshot()
-    self:enqueue("requestSnapshot")
+    self:enqueue("requestSnapshot", "requestSnapshot")
 end
 
 function Client:requestWelcome()
-    self:enqueue("requestWelcome")
+    self:enqueue("requestWelcome", "requestWelcome")
 end
 
 function Client:syncComponent(component)
     Log:verbose("Send", "syncComponent", component.entity.name, component.name)
     msg = string.format("updateComponent %s",
         serialize({component.entity.name, component}))
-    self:enqueue(msg)
+    self:enqueue("syncComponent " .. component.entity.name " " .. component.name, msg)
 end
 
 function Client:syncTopLevelEntity(entity)

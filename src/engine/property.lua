@@ -38,8 +38,8 @@ function Property:update()
     end
 end
 
-function Property:serialize(depth)
-    return serialize(self:get(), depth)
+function Property:serialize(depth, filter)
+    return serialize(self:get(), depth, filter)
 end
 
 function define_property(name, settings, defaults, parent, parentArguments)

@@ -69,6 +69,10 @@ function Entity:addComponent(component)
     return component
 end
 
+function Entity:removeComponent(componentName)
+    self.components[componentName] = nil
+end
+
 function Entity:hasComponent(class)
     for key, component in pairs(self.components) do
         if component:isInstanceOf(class) then return true end
@@ -109,7 +113,7 @@ function Entity:serialize(depth)
         table.insert(elements, child)
     end
 
-    return 'define(Entity) ' .. serialize(self.name) .. ' ' .. serialize(elements, depth)
+    return 'define(Entity) ' .. serialize(self.name, 0, filter) .. ' ' .. serialize(elements, depth, filter)
 end
 
 function Entity:apply(entity, insert)

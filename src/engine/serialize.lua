@@ -28,11 +28,16 @@ function string.times(input, count)
     return out
 end
 
-function serialize(obj, depth)
+function serialize(obj, depth, filter)
     depth = depth or 0
+    filter = filter or function() return true end
     indent = "    "
 
     local result = ''
+
+    if not filter(obj) then
+        return ''
+    end
 
     if type(obj) == "number" then
         result = tostring(obj)
@@ -48,7 +53,7 @@ function serialize(obj, depth)
         result = obj and 'true' or 'false'
     elseif type(obj) == "table" then
         if obj.serialize and type(obj.serialize == "function") then
-            result = obj:serialize(depth)
+            result = obj:serialize(depth, filter)
         elseif obj.isInstanceOf and obj:isInstanceOf(class.Object) then
             Log:error("Cannot serialize object of type " .. tostring(obj.class) .. ". Please implement the " .. tostring(obj.class) .. " :serialize() method.")
             return ""
@@ -57,9 +62,16 @@ function serialize(obj, depth)
             for k, v in pairs(obj) do
                 result = result .. string.times(indent, depth + 1)
                 if type(k) == "string" and isValidSymbol(k) then
-                    result = result .. k .. ' = ' .. serialize(v, depth + 1) .. ', \n'
+                    local value = serialize(v, depth + 1, filter)
+                    if value ~= '' then
+                        result = result .. k .. ' = ' .. value .. ', \n'
+                    end
                 else
-                    result = result .. '[ ' .. serialize(k) .. ' ] = ' .. serialize(v, depth + 1) .. ', \n'
+                    local key = serialize(k, 0, filter)
+                    local value = serialize(v, depth + 1, filter)
+                    if key ~= '' and value ~= '' then
+                        result = result .. '[ ' .. serialize(k, 0, filter) .. ' ] = ' .. serialize(v, depth + 1, filter) .. ', \n'
+                    end
                 end
             end
             result = result .. string.times(indent, depth) .. '}'

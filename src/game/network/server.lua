@@ -63,16 +63,20 @@ end
 function Server:sendWelcome(id)
     local playerName = nil
     if not self.clients[id] then
-        local i = math.floor(randf(1,#availablePlayers + 1))
-        playerName = availablePlayers[i]
+        repeat
+            local i = math.floor(randf(1,#availablePlayers + 0.99))
+            playerName = availablePlayers[i]
+        until playerName ~= nil
+        table.removeValue(availablePlayers, playerName)
+
         Log:info("Send welcome to new player '" .. playerName .. "'")
         self.clients[id] = playerName
-        table.removeValue(availablePlayers, playerName)
     else
         playerName = self.clients[id]
         Log:debug("Resend welcome to '" .. playerName .. "'")
     end
-    self:enqueue(string.format("welcome \"%s\"", playerName))
+    local msg = string.format("welcome \"%s\"", playerName)
+    self:enqueue(msg, msg, id)
 end
 
 function Server:onMessage(id, type, data)
@@ -83,7 +87,15 @@ function Server:onMessage(id, type, data)
     elseif type == "updateComponent" then
         self.scene:updateComponent(data[1], data[2])
     elseif type == "updateTopLevelEntity" then
-        self.scene:updateEntity(data[1], data[2])
+        entityName = data[1]
+        entity = data[2]
+        entity.name = entityName
+        self.scene:updateEntity(entityName, entity)
+        for otherId, _ in pairs(self.clients) do
+            if otherId ~= id then
+                self:sendUpdateTopLevelEntity(entity, otherId)
+            end
+        end
     end
-    Log:debug("Recieved", type, "from", id)
+    Log:verbose("Recieved", type, "from", id)
 end

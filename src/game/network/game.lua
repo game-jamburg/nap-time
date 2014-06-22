@@ -9,15 +9,20 @@ function GameState:initialize()
     self.messageQueue = {}
 end
 
-function GameState:enqueue(message, target)
-    table.insert(self.messageQueue, {message, target})
+function GameState:enqueue(key, message, target)
+    self.messageQueue[key] = {message, target}
 end
 
 function GameState:sendQueue()
+    local i = 0
     for _, data in pairs(self.messageQueue) do
         self:send(data[1], data[2])
+        i = i + 1
     end
     self.messageQueue = {}
+    if i ~= 0 then
+        Log:verbose("Send queue with " .. i .. " messages")
+    end
 end
 
 function GameState:send(data, target) 
@@ -35,7 +40,17 @@ end
 
 function GameState:sendUpdateTopLevelEntity(entity, target)
     Log:verbose("Send", "updateTopLevelEntity", entity.name)
+
+    function filter(obj)
+        if type(obj) == "table" and obj.isInstanceOf then
+            return not(obj:isInstanceOf(Animation) or obj:isInstanceOf(Player)
+                       or obj:isInstanceOf(Camera))
+        else
+            return true
+        end
+    end
+
     msg = string.format("updateTopLevelEntity %s",
-        serialize({entity.name, entity}))
-    self:enqueue(msg, target)
+        serialize({entity.name, entity}, 0, filter))
+    self:enqueue("updateTopLevelEntity " .. entity.name, msg, target)
 end
