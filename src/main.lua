@@ -50,9 +50,9 @@ function love.load(args)
     isClient = not isServer
 
     if isServer then
-        require "server"
+        require "main-server"
     else
-        require "client"
+        require "main-client"
     end
     engine:subscribe()
 
