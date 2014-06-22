@@ -20,3 +20,11 @@ function Character:onAdd(entity)
     text.size = 20
     text.order = 20
 end
+
+function Character:damage(amount)
+  self.health = self.health - amount
+  print(self.name .. " took " .. amount .. " damage")
+  if self.health <= 0 then
+    print(self.name .. " died")
+  end
+end

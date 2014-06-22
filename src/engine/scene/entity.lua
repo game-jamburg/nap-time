@@ -69,6 +69,13 @@ function Entity:addComponent(component)
     return component
 end
 
+function Entity:hasComponent(class)
+    for key, component in pairs(self.components) do
+        if component:isInstanceOf(class) then return true end
+    end
+    return false
+end
+
 function Entity:onAdd(scene)
     self.scene = scene
     for _, child in pairs(self.children) do

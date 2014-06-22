@@ -2,12 +2,13 @@ Resources = class("Resources")
 
 function Resources:initialize()
     self.image = {}
+    self.animation = {}
     self.font = {}
     self.sound = {}
     self.text = {}
 end
 
-function Resources:load(type, name, path)
+function Resources:load(type, name, path, ...)
     local res = nil
 
     Log:debug("Loading " .. type .. " [" .. path .. "] as [" .. name .. "].")
@@ -20,6 +21,9 @@ function Resources:load(type, name, path)
         res = love.sound.newSoundData(path)
     elseif type == Resources.Text then
         res = love.filesystem.read(path)
+    elseif type == Resources.Animation then
+        local args = {...}
+        res = {image=path, frameWidth=args[1], frameHeight=args[2], delay=args[3], frames=args[4], mode=args[5]}
     else
         print("Unknown resource type '" .. type .. "' for resource '" .. name .. "' at '" .. path .. "'.")
         return nil
@@ -33,6 +37,7 @@ Resources.static.Image = "image"
 Resources.static.Font = "font"
 Resources.static.Sound = "sound"
 Resources.static.Text = "text"
+Resources.static.Animation = "animation"
 
 -- function Resources:makeSound(name)
 --     return love.audio.newSource(self.sounds[name])

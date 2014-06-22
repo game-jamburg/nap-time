@@ -16,20 +16,21 @@ require "game/character"
 require "game/menubutton"
 require "game/network"
 require "game/score"
-require "game/timer"
 
 engine = Engine:new()
 
 function love.load(args)
-
-    engine.resources:load(Resources.Image, "target", "data/target.png")
+    engine.resources:load(Resources.Image, "background", "data/gfx/gruen.jpg")
     engine.resources:load(Resources.Image, "blur", "data/blur.png")
+    engine.resources:load(Resources.Image, "level01", "data/levels/level-01/background.png")
     engine.resources:load(Resources.Image, "ninja-walk-lower", "data/gfx/anim/ninja/walk-lower.png")
     engine.resources:load(Resources.Image, "ninja-walk-upper", "data/gfx/anim/ninja/walk-upper.png")
     engine.resources:load(Resources.Image, "ninja-slash-upper", "data/gfx/anim/ninja/slash-upper.png")
-    engine.resources:load(Resources.Image, "level01", "data/levels/level-01/background.png")
+    engine.resources:load(Resources.Image, "target", "data/target.png")
+    engine.resources:load(Resources.Animation, "ninja-slash-upper", "ninja-slash-upper", 340, 229, 0.033, 13)
+    engine.resources:load(Resources.Animation, "ninja-walk-lower", "ninja-walk-lower", 104, 128, 0.033, 21)
+    engine.resources:load(Resources.Animation, "ninja-walk-upper", "ninja-walk-upper", 126, 181, 0.033, 21)
     engine.resources:load(Resources.Text,  "level01", "data/levels/level-01/mesh.lua")
-    engine.resources:load(Resources.Image,  "background", "data/gfx/gruen.jpg")
 
     state = State:new()
     menu = State:new()
