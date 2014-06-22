@@ -19,7 +19,8 @@ function Score:onDraw()
     for number,player in pairs(self.players) do
         if self.round < 4 then
             love.graphics.setColor(0,0,0)
-            FontFace.Default:set(50)
+            -- FontFace.Default:set(50)
+            engine.resources.font.bold:set(50)
             love.graphics.print("The " .. self.team .. " won!", Vector.WindowSize.x/2 -200,30)
            
             if player[3] then
@@ -36,8 +37,8 @@ function Score:onDraw()
             love.graphics.print(winner, Vector.WindowSize.x / 2 - dim.x / 2, 30)
         end
         FontFace.Default:set(30)
-        love.graphics.print(player[1], 50, 70 + number*30)
-        love.graphics.print(player[2], 300, 70 + number*30)
+        love.graphics.print(player[1], 50, 90 + number*30)
+        love.graphics.print(player[2], 300, 90 + number*30)
 
     end
     -- love.graphics.print(self.players[1][1], 50, 70)

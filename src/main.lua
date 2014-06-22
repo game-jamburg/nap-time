@@ -40,6 +40,10 @@ function love.load(args)
     engine.resources:load(Resources.Animation, "pirate-walk-upper", "pirate-walk-upper", 108, 128, 0.033, 22, {origin=Vector:new(0.34, 0.57), scaleFactor=1.5})
     engine.resources:load(Resources.Text,  "level01", "data/levels/level-01/mesh.lua")
 
+    engine.resources:load(Resources.Font, "bold", "data/fonts/3Dumb.ttf")
+    engine.resources:load(Resources.Font, "default", "data/fonts/2Dumb.ttf")
+    FontFace.static.Default = engine.resources.font.default
+
     state = State:new()
     
     isServer = (args[2] == "--server")
