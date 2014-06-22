@@ -9,7 +9,7 @@ require "engine"
 require "game/player"
 require "game/animation"
 require "game/camera"
-require "game/mousegui"
+require "game/ui/mouse"
 require "game/level"
 require "game/positionbymouse"
 require "game/character"
@@ -44,8 +44,8 @@ function love.load()
     
     -- Mouse target
     mouseTarget = state.scene:addEntity(Entity:new("mousetarget"))
-    mousegui = mouseTarget:addComponent(MouseGUI:new("mousegui", "target"))
-    mousegui.scale = Vector:new(0.2,0.2)
+    mouse_ui = mouseTarget:addComponent(MouseUI:new("mouse_ui", "target"))
+    mouse_ui.scale = Vector:new(0.2,0.2)
     mouseTarget:addComponent(PositionByMouse:new("positionbymouse"))
 
     level = state.scene:addEntity(Entity:new("level"))

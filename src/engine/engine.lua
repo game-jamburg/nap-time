@@ -10,7 +10,7 @@ function Engine:initialize()
 
     self.states = {}
     self.renderer = Renderer:new()
-    self.guirenderer = Renderer:new()
+    self.ui = Renderer:new()
     self.resources = Resources()
 
     self:updateGlobals(0)
@@ -73,18 +73,18 @@ function Engine:fixedupdate(dt)
 end
 
 function Engine:draw() 
+    -- World
     local view = self:getCurrentState().scene.view
     View.popAll()
     view:push()
     self.renderer:render()
     -- self:getCurrentState().scene.world:debugDraw()
-    View:popAll()
-    self:renderGUI()
-end
 
-function Engine:renderGUI()
+    -- UI
+    View:popAll()
+    View:new():push()
     Color.White:set()
-    self.guirenderer:render()
+    self.ui:render()
 end
 
 function Engine:handleEvent(type, data) 
