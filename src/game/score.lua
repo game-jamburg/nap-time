@@ -21,6 +21,13 @@ function Score:enter()
     table.sort(self.players,function(a,b) return a[2] > b[2] end)    
 end
 
+function Score:onEvent(type, data)
+    if type == "keyreleased" and data.key == " " then
+        engine:popState()
+
+        initLevel()
+    end
+end
 
 function Score:onDraw()
     engine.resources.font.bold:set(50)
@@ -50,5 +57,7 @@ function Score:onDraw()
         love.graphics.print(player[1], 50, 90 + number*30)
         love.graphics.print(player[2], 300, 90 + number*30)
     end
+
+    love.graphics.print("Press Space to start new round", 80, 400)
 end
 

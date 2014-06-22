@@ -38,7 +38,6 @@ function createScore()
 end
 
 function createMenu()
-
     menu = State:new()
     menu.scene.view = View:new()
     test = menu.scene:addEntity(Entity:new("test"))
@@ -64,9 +63,6 @@ function createMenu()
     exitButton.size = Vector:new(100, 30)
     exitButton.text = "Exit"
     exitButton.click = function() love.event.quit() end
-
-
-
 end
 
 function love.keypressed(key)
