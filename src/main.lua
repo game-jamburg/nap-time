@@ -15,8 +15,6 @@ require "game/positionbymouse"
 require "game/character"
 require "game/menubutton"
 require "game/score"
-require "game/timer"
-
 
 engine = Engine:new()
 
