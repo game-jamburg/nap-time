@@ -104,7 +104,7 @@ function Player:strike()
     end
 end
 
-function Player:slashEnded()
+function Player:attackEnded()
     self.attacking = false
     self.lowerAnimation.animation = "ninja-walk-lower"
     self.upperAnimation.animation = "ninja-walk-upper"
