@@ -6,6 +6,7 @@ function Character:initialize(name, title, health, type)
     self.health = health or 100
     self.type = type or "ninja"
     self.dead = false
+    self.attacking = false
 end
 
 function Character:onAdd(entity)
@@ -75,4 +76,41 @@ function Character:setAnimation(animation, special)
     elseif animation == "slash" then
         upper:set(self.type .. "-slash-upper", 1, "once")
     end
+end
+
+function Character:strike()
+    self.attacking = true
+    self:setAnimation("slash")
+    wait(0.033 * 13, function() self:attackEnded() end)
+
+    for key, entity in pairs(self.entity.scene.entities) do
+        if entity:hasComponent(Character) and not entity:hasComponent(Player) then
+            local pos = self.entity.components.transform.position
+
+            local otherpos = entity.components.transform.position - pos
+            local otherdeg = math.atan2(otherpos.x, otherpos.y) + math.pi
+
+            local distance = math.sqrt((otherpos.x)^2+(otherpos.y)^2)
+
+            local mousepos = self.entity.scene.view:toLocal(Mouse.Position) - pos
+            local mousedeg = math.atan2(mousepos.x, mousepos.y) + math.pi
+
+            local degdiff = math.abs(mousedeg - otherdeg)
+            local actualdiff = math.min(degdiff, (2*math.pi)-degdiff)
+
+            if distance <= 160 and actualdiff <= 1 then
+                if distance <= 105 and actualdiff <= 0.65 then
+                    -- critical hit
+                    entity.components.character:damage(100)
+                else
+                    entity.components.character:damage(50)
+                end
+            end
+        end
+    end
+end
+
+function Character:attackEnded()
+    self.attacking = false
+    self:setAnimation("idle")
 end

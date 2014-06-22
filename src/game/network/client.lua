@@ -80,7 +80,12 @@ function Client:onMessage(type, data)
                 player.target = target.transform
             end
         end
-
+    elseif type == "rpc" then
+        -- remote procedure call
+        local entity = self.scene.entities[data.entity]
+        local component = entity.components[data.component]
+        local func = component[data.func]
+        func(component, unpack(data.params))
     elseif type == "welcome" then
         if not self.playerName then
             Log:info("You are now '" .. data .. "'")

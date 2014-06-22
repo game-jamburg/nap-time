@@ -28,13 +28,11 @@ function Server:onConnect(id)
 end
 
 function Server:onReceive(data, id)
-    Log:verbose("Message received from " .. id)
-
     local type, payload = self:splitMessage(data)
     if payload then
         payload = loadstring("return " .. payload)()
     end
-    self:onMessage(id, type, payload)
+    self:onMessage(id, type, payload, data)
 end
 
 function Server:onDisconnect(ip, port)
@@ -87,7 +85,8 @@ function Server:sendKill(id)
     self:enqueue(id .. "kill", "kill", id)
 end
 
-function Server:onMessage(id, type, data)
+function Server:onMessage(id, type, data, message)
+    Log:verbose("Received message " .. type .. " from " .. id)
     if type == "requestSnapshot" then
         self:sendSnapshot(id)
     elseif type == "requestWelcome" then
@@ -104,6 +103,17 @@ function Server:onMessage(id, type, data)
                 self:sendUpdateTopLevelEntity(entity, otherId)
             end
         end
+    elseif type == "rpc" then
+        local entity = self.scene.entities[data.entity]
+        local component = entity.components[data.component]
+        local func = component[data.func]
+        func(component, unpack(data.params))
+        
+        -- forward to every client
+        for clientid, _ in pairs(self.clients) do
+            if id ~= clientid then
+                self:enqueue(message .. clientid, message, clientid)
+            end
+        end
     end
-    Log:verbose("Recieved", type, "from", id)
 end
