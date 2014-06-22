@@ -43,7 +43,7 @@ function Player:onFixedUpdate(dt)
             self.movement = Vector:new()
         end
 
-        if not self.attacking then
+        if not self:getCharacter().attacking then
             self:getCharacter():setAnimation(standing and "idle" or "walk")
         end
 

@@ -6,7 +6,7 @@ function Sprite:initialize(name, image, order, origin)
     self.order  = order  or 0
     self.origin = origin or Vector(0.5, 0.5)
     self.scaleFactor = 1
-    self.color = Color.White
+    self.color = Color:new(1,1,1)
 
     self:addProperty(Property.Vector:new(self, "origin"))
     self:addProperty(Property.String:new(self, "image"))

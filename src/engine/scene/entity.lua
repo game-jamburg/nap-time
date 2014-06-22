@@ -8,6 +8,7 @@ function Entity:initialize(name)
     self.components = {}
     self.parent = nil
     self.children = {}
+    self.enabled = true
 
     self.transform = self:addComponent(Transform:new("transform"))
 end
@@ -28,6 +29,7 @@ function Entity:restore(data)
 end
 
 function Entity:update(dt)
+    if not self.enabled then return end
     for i, component in pairs(self.components) do
         component:update(dt)
     end
