@@ -27,7 +27,7 @@ function Character:onAdd(entity)
     end
 
     if not entity.components.physics then
-        self.entity:addComponent(Physics:new("physics", function() return love.physics.newCircleShape(30), 0, 0, 1 end))
+        self.entity:addComponent(Physics:new("physics", function() return love.physics.newCircleShape(50), 0, 0, 1 end))
     end
 
     local label = entity:addChild(Entity:new("label"))
