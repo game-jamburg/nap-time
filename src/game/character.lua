@@ -5,6 +5,7 @@ function Character:initialize(name, title, health, type)
     self.title = title
     self.health = health or 100
     self.type = type or "ninja"
+    self.dead = false
 end
 
 function Character:onAdd(entity)
@@ -43,6 +44,7 @@ function Character:damage(amount)
     self.health = self.health - amount
     print(self.name .. " took " .. amount .. " damage")
     if self.health <= 0 then
+        self.dead = true
         print(self.name .. " died")
     end
 end

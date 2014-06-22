@@ -76,7 +76,8 @@ function Player:onEvent(type, data)
     if type == "mousereleased" and data.button == "l" and not self.attacking then
         self.attacking = true
         self:getCharacter():setAnimation("slash")
-        wait(0.033 * 13, function() self:attackEnded() end)
+        local attackFrames = (self:getCharacter().type == "ninja") and 13 or 27
+        wait(0.033 * attackFrames, function() self:attackEnded() end)
         self:strike()
     elseif type == "keypressed" then
         if data.key == " " then

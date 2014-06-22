@@ -4,7 +4,7 @@ function Logger:initialize()
     self.messages = {}
     self.onMessage = nil
     self.levels = {"VERBOSE", "DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"}
-    self.printLevel = self:getLevelNumber("VERBOSE")
+    self.printLevel = self:getLevelNumber("INFO")
     self.prefix = nil
     -- self.fileLevel = self:getLevelNumber("INFO")
 end
