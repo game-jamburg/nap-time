@@ -17,6 +17,7 @@ require "game/character"
 require "game/menubutton"
 require "game/network"
 require "game/score"
+require "game/menu"
 
 engine = Engine:new()
 
@@ -118,13 +119,6 @@ function initLevel()
         chatlog:append("You started the client.")
         chatlog:append("Welcome.")
     end
-end
-
-
-function love.keypressed(key)
-    if key == "f1" and engine:getCurrentState() == state then
-        engine:pushState(menu)
-    end 
 end
 
 function love.update(dt)
