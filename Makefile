@@ -1,6 +1,6 @@
 default: both
 
-run:
+client:
 	love src/
 
 server:
