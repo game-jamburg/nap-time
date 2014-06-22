@@ -122,6 +122,16 @@ function table.indexOf(t, object)
     return result
 end
 
+function love.graphics.printBorder(text, c1, c2, x, y, ...)
+    c1:set()
+    love.graphics.print(text, x+1, y, ...)
+    love.graphics.print(text, x-1, y, ...)
+    love.graphics.print(text, x, y+1, ...)
+    love.graphics.print(text, x, y-1, ...)
+    c2:set()
+    love.graphics.print(text, x, y, ...)
+end
+
 BLEND_MODES = {
     {"additive", "Add"},
     {"alpha", "Alpha blend"}, 

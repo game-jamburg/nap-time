@@ -45,6 +45,8 @@ function Animation:onDraw()
         if args.start then 
             self.anim:seek(args.start)
         end
+
+        self.scaleFactor = args.scaleFactor or 1
     end
 
     local origin   = self.origin:permul(Vector:new(self.anim.fw, self.anim.fh))

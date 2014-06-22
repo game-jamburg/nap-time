@@ -5,7 +5,10 @@ function Camera:initialize(name)
 end
 
 function Camera:onUpdate(dt)
+    -- local level = self.entity.scene.entities.level.components.level
+    local pos = - self.entity.transform.global.position
+
     local view = View:new(View.default)
-    view.translate = - self.entity.transform.global.position
+    view.translate = pos
     self.entity.scene.view = view
 end
