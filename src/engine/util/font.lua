@@ -9,8 +9,8 @@ end
 function FontFace:getFont(size)
     size = size or self.defaultSize
     if not self._fonts[size] then
-        if self.font then
-            self._fonts[size] = love.graphics.newFont(self.font, size)
+        if self.source then
+            self._fonts[size] = love.graphics.newFont(self.source, size)
         else
             self._fonts[size] = love.graphics.newFont(size)
         end

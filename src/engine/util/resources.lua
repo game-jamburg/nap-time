@@ -16,7 +16,7 @@ function Resources:load(type, name, path, ...)
     if type == Resources.Image then
         res = love.graphics.newImage(path)
     elseif type == Resources.Font then
-        res = Font:new(path)
+        res = FontFace:new(path)
     elseif type == Resources.Sound then
         res = love.sound.newSoundData(path)
     elseif type == Resources.Text then
