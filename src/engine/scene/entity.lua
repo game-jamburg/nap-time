@@ -112,11 +112,13 @@ function Entity:serialize(depth)
     return 'define(Entity) ' .. serialize(self.name) .. ' ' .. serialize(elements, depth)
 end
 
-function Entity:apply(entity)
+function Entity:apply(entity, insert)
+    Log:verbose("Apply entity", self.name)
+
     for _, child in pairs(entity.children) do
         if self.children[child.name] then
-            self.children[child.name]:apply(child)
-        else
+            self.children[child.name]:apply(child, insert)
+        elseif insert then
             self:addChild(child)
         end
     end
@@ -124,7 +126,7 @@ function Entity:apply(entity)
     for _, component in pairs(entity.components) do
         if self.components[component.name] then
             self.components[component.name]:apply(component)
-        else
+        elseif insert then
             self:addComponent(component)
         end
     end

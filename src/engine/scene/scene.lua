@@ -79,11 +79,11 @@ function Scene:save(filename)
     end
 end
 
-function Scene:apply(scene)
+function Scene:apply(scene, insert)
     for _, entity in pairs(scene.entities) do
         if self.entities[entity.name] then
-            self.entities[entity.name]:apply(entity)
-        else
+            self.entities[entity.name]:apply(entity, insert)
+        elseif insert then
             self:addEntity(entity)
         end
     end
@@ -98,10 +98,11 @@ function Scene:updateComponent(entityName, component)
     end
 end
 
-function Scene:updateEntity(name, data)
+function Scene:updateEntity(name, data, insert)
+    Log:verbose("Call Scene:updateEntity", name, data, insert)
     local entity = self.entities[name]
     if entity then
-        entity:apply(data)
+        entity:apply(data, insert)
     else
         Log:error("Scene:updateEntity", "Does not exist", name)
     end

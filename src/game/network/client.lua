@@ -47,24 +47,26 @@ end
 
 function Client:onMessage(type, data)
     Log:verbose("Client received message of type " .. type)
-    if type == "snapshot" then
-        self.scene:apply(data)
+    if type == "updateTopLevelEntity" then
+        self.scene:updateEntity(data[1], data[2], true)
 
         -- now, make sure we own our player
-        local ninja = self.scene.entities.ninja
-        if not ninja.components.player then
-            player = ninja:addComponent(Player:new("player"))
+        if data[1] == "ninja" then
+            local ninja = self.scene.entities.ninja
+            if not ninja.components.player then
+                player = ninja:addComponent(Player:new("player"))
 
-            -- also, add the mouse target stuff
-            target = self.scene:addEntity(Entity:new("target"))
+                -- also, add the mouse target stuff
+                target = self.scene:addEntity(Entity:new("target"))
 
-            sprite = target:addComponent(Sprite:new("mouseui", "target"))
-            sprite.scaleFactor = 0.2
-            sprite.renderer = engine.ui
+                sprite = target:addComponent(Sprite:new("mouseui", "target"))
+                sprite.scaleFactor = 0.2
+                sprite.renderer = engine.ui
 
-            target:addComponent(PositionByMouse:new("positionbymouse", "target"))
+                target:addComponent(PositionByMouse:new("positionbymouse", "target"))
 
-            player.target = target.transform
+                player.target = target.transform
+            end
         end
     end
 end
@@ -82,7 +84,5 @@ end
 
 function Client:syncTopLevelEntity(entity)
     Log:verbose("Send", "syncTopLevelEntity", entity.name)
-    msg = string.format("updateTopLevelEntity %s",
-        serialize({entity.name, entity}))
-    self:enqueue(msg)
+    self:sendUpdateTopLevelEntity(entity)
 end

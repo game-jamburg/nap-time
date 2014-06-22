@@ -32,3 +32,10 @@ function GameState:splitMessage(msg)
         return msg:match("^(%S+)$")
     end
 end
+
+function GameState:sendUpdateTopLevelEntity(entity, target)
+    Log:verbose("Send", "updateTopLevelEntity", entity.name)
+    msg = string.format("updateTopLevelEntity %s",
+        serialize({entity.name, entity}))
+    self:enqueue(msg, target)
+end

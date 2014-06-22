@@ -54,8 +54,9 @@ function Server:onEvent(type, data)
 end 
 
 function Server:sendSnapshot(id)
-    local data = "snapshot " .. serialize(self.scene)
-    self:enqueue(data, id)
+    for _, entity in pairs(self.scene.entities) do
+        self:sendUpdateTopLevelEntity(entity, id)
+    end
 end
 
 function Server:onMessage(id, type, data)

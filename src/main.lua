@@ -79,11 +79,10 @@ function initLevel()
     shadow.order = 1
     shadow.scaleFactor = 0.3
 
-
     -- Test Enemy
     local names = {"John", "Captain Silver", "Barnacle", "William"}
     for i=1,4 do
-        enemy = state.scene:addEntity(Entity:new("enemy"))
+        enemy = state.scene:addEntity(Entity:new("pirate-" .. i))
         enemy.transform.position = Vector:new(500 + 200 * i, 1900)
         shadow = enemy:addComponent(Sprite:new("shadow", "blur"))
         shadow.color = Color:new(0, 0, 0, 0.5)
@@ -97,7 +96,7 @@ function initLevel()
     
     -- UI TEST 
     if isClient then
-        uiRoot = state.scene:addEntity(Entity:new("butten"))
+        uiRoot = state.scene:addEntity(Entity:new("button"))
 
         -- Menu button
         testButton = uiRoot:addComponent(MenuButton:new("button"))
@@ -111,7 +110,6 @@ function initLevel()
         chatlog:append("You started the client.")
         chatlog:append("Welcome.")
     end
-    
 end
 
 
