@@ -63,7 +63,8 @@ end
 function Server:sendWelcome(id)
     local playerName = nil
     if not self.clients[id] then
-        playerName = availablePlayers[#availablePlayers]
+        local i = math.floor(randf(1,#availablePlayers + 1))
+        playerName = availablePlayers[i]
         Log:info("Send welcome to new player '" .. playerName .. "'")
         self.clients[id] = playerName
         table.removeValue(availablePlayers, playerName)
