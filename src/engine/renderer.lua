@@ -2,6 +2,7 @@ Renderer = class("Renderer")
 
 function Renderer:initialize()
     self.renderQueue = {}
+    self.preRender = nil
 end
 
 function Renderer:queue(renderable, order)
@@ -14,6 +15,9 @@ function Renderer:render()
     end)
 
     for k, v in pairs(self.renderQueue) do
+        if self.preRender then
+            self.preRender(v[2])
+        end
         v[2]:onDraw()
     end
 

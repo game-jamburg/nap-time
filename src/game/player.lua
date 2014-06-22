@@ -13,6 +13,7 @@ end
 function Player:onAdd(entity)
     if not self.entity.components.camera then
         self.entity:addComponent(Camera:new("camera"))
+        self.entity:addComponent(Lamp:new("lamp"))
     end
 end
 

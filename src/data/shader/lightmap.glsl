@@ -16,8 +16,10 @@ vec4 effect(vec4 color, Image texture, vec2 texture_coords, vec2 pixel_coords) {
 
     float diff = shadow - d;
 
-    float a = mix(0, 1, clamp(diff / 2 + 0.5, 0, 1));
+    float a = mix(0, 1, clamp(diff / 10 + 0.5, 0, 1));
 
+    // float range = 100;
+    // float blur = 10;
     // float dd = d - range;
     // float aa = sin((clamp(dd, -blur, blur) / (blur * 2)) * 3.1415);
 

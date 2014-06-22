@@ -9,12 +9,16 @@ function Lamp:initialize(name)
     self.shadowMapData = love.image.newImageData(512, 1)
     self.shadowMap = nil
     self.stencil = love.graphics.newCanvas(self.radius * 2, self.radius * 2)
+
+    self.renderPos = nil
 end
 
 function Lamp:onAdd(entity)
-    -- self.sprite = entity:addComponent(Sprite:new(self.name .. "_sprite", nil))
-    -- self.sprite.order = 100
-    -- self.sprite.scaleFactor = 1
+    if isClient then
+        local sprite = entity:addComponent(Sprite:new(self.name .. "_sprite", self.name .. "_lightmap"))
+        sprite.order = 100
+        sprite.scaleFactor = 1
+    end
 end
 
 function Lamp:onUpdate(dt)
@@ -22,6 +26,9 @@ function Lamp:onUpdate(dt)
     local width = self.shadowMapData:getWidth()
     local world = self.entity.scene.world.physicsWorld
     local pos = self.entity.transform.global.position
+
+    -- pos = Vector:new(math.roundTo(pos.x, self.sampling), math.roundTo(pos.y, self.sampling))
+    -- if pos == self.renderPos then return end
 
     for i = 0, width  - 1 do
         local alpha = i * math.pi * 2 / width
@@ -62,7 +69,6 @@ function Lamp:onUpdate(dt)
     -- render stencil
     local shader = engine.resources.shader.lightmap
     shader:send("radius", self.radius)
-    -- shader:send("sampling", self.sampling)
     shader:send("shadowmap", self.shadowMap)
 
     love.graphics.setCanvas(self.stencil)
@@ -72,7 +78,7 @@ function Lamp:onUpdate(dt)
     love.graphics.setShader()
     love.graphics.setCanvas()
 
-    -- self.sprite.image = love.graphics.newImage(self.stencil:getImageData())
-    -- -- self.sprite.image:setFilter("nearest", "nearest")
-    -- self.sprite.scaleFactor = self.sampling
+    -- local sprite = self.entity.components[self.name .. "_sprite"]
+    engine.resources.image["lightmap"] = love.graphics.newImage(self.stencil:getImageData())
+    -- sprite.scaleFactor = self.sampling
 end

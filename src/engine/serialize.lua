@@ -66,7 +66,7 @@ function serialize(obj, depth)
         end
     else
         Log:error("Unable to serialize object", obj)
-        return ""
+        return "{}"
     end
 
     return result

@@ -18,8 +18,10 @@ function World:beginContact(a, b, coll)
     local uB = b:getUserData()
 
     if uA and uB then
-        if not uA:onCollide(uB, coll) then
-            uB:onCollide(uA, coll)
+        if not uA.onCollide or not uA:onCollide(uB, coll) then
+            if uB.onCollide then
+                uB:onCollide(uA, coll)
+            end
         end
     end
 end

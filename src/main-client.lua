@@ -4,6 +4,25 @@ function loadState()
     createScore()
     createMenu()
 
+    engine.renderer.preRender = function(drawable)
+        if not client.playerName then return end
+        local lamp = drawable.entity.scene.entities[client.playerName].components.lamp
+        local isPlayer = drawable.entity.parent and drawable.entity.parent.components.player
+        if engine.resources.image.lightmap and not isPlayer and lamp then
+            local stencil = engine.resources.shader.stencil
+            local view = client.scene.view
+            local scale = view:getGlobalScale()
+            stencil:send("stencil", engine.resources.image.lightmap)
+            stencil:send("size", {Vector.WindowSize.x, Vector.WindowSize.y})
+            stencil:send("sampling", lamp.sampling)
+            stencil:send("radius", lamp.radius)
+            stencil:send("scale", {scale.x, scale.y})
+            love.graphics.setShader(stencil)
+        else
+            love.graphics.setShader()
+        end
+    end
+
     client = Client:new()
     return client
 end
@@ -64,5 +83,5 @@ function love.keypressed(key)
 end
 
 function love.draw()
-    love.graphics.setBackgroundColor(150, 150, 150)
+    love.graphics.setBackgroundColor(0, 0, 0)
 end

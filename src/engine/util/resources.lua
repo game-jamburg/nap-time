@@ -1,9 +1,10 @@
 Resources = class("Resources")
 
 function Resources:initialize()
-    self.image = {}
     self.animation = {}
     self.font = {}
+    self.image = {}
+    self.shader = {}
     self.sound = {}
     self.text = {}
 end
@@ -13,17 +14,19 @@ function Resources:load(type, name, path, ...)
 
     Log:debug("Loading " .. type .. " [" .. path .. "] as [" .. name .. "].")
 
-    if type == Resources.Image then
-        res = love.graphics.newImage(path)
+    if type == Resources.Animation then
+        local args = {...}
+        res = {image=path, frameWidth=args[1], frameHeight=args[2], delay=args[3], frames=args[4], args=args[5] or {}}
     elseif type == Resources.Font then
         res = FontFace:new(path)
+    elseif type == Resources.Image then
+        res = love.graphics.newImage(path)
+    elseif type == Resources.Shader then
+        res = love.graphics.newShader(path)
     elseif type == Resources.Sound then
         res = love.sound.newSoundData(path)
     elseif type == Resources.Text then
         res = love.filesystem.read(path)
-    elseif type == Resources.Animation then
-        local args = {...}
-        res = {image=path, frameWidth=args[1], frameHeight=args[2], delay=args[3], frames=args[4], args=args[5] or {}}
     else
         print("Unknown resource type '" .. type .. "' for resource '" .. name .. "' at '" .. path .. "'.")
         return nil
@@ -33,11 +36,12 @@ function Resources:load(type, name, path, ...)
     return res
 end
 
-Resources.static.Image = "image"
+Resources.static.Animation = "animation"
 Resources.static.Font = "font"
+Resources.static.Image = "image"
+Resources.static.Shader = "shader"
 Resources.static.Sound = "sound"
 Resources.static.Text = "text"
-Resources.static.Animation = "animation"
 
 -- function Resources:makeSound(name)
 --     return love.audio.newSource(self.sounds[name])

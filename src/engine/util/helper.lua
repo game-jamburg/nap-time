@@ -56,6 +56,10 @@ function math.floorTo(k, t)
     return math.floor(k / t) * t
 end
 
+function math.roundTo(k, t)
+    return math.round(k / t) * t
+end
+
 function math.round(num, idp)
     local mult = 10^(idp or 0)
     return math.floor(num * mult + 0.5) / mult

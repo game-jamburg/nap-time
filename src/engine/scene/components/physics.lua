@@ -28,6 +28,7 @@ function Physics:onUpdate(dt)
         self.body = love.physics.newBody(self.entity.scene.world.physicsWorld, dx, dy, "dynamic")
         self.shape = shape
         self.fixture = love.physics.newFixture(self.body, self.shape, density)
+        self.fixture:setUserData(self)
     end
     if self.stale then
         self:pull()

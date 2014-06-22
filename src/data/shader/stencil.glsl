@@ -1,27 +1,22 @@
 extern sampler2D stencil;
-extern vec2 position;
-extern float scale;
+extern float radius;
+extern float sampling;
+extern vec2 size;
+extern vec2 scale;
 
 vec4 effect(vec4 color, Image texture, vec2 texture_coords, vec2 pixel_coords) {
-    pixel_coords - position * scale;
-    float dx = radius - pixel_coords.x;
-    float dy = radius - pixel_coords.y;
+    vec2 screenPos = vec2(gl_FragCoord.x, size.y - gl_FragCoord.y);
+    vec2 screenCenter = size / 2;
+    vec2 fromScreenCenter = screenPos - screenCenter;
 
-    float alpha = atan(dy, dx);
-    float tx = (alpha / 3.1415927) * 0.5 + 0.5;
+    fromScreenCenter /= scale;
 
-    float d = sqrt(dx * dx + dy * dy);
-    vec4 shadowV = texture2D(shadowmap, vec2(tx, 0.5));
-    float shadow = shadowV.r + shadowV.g * 256 + shadowV.b * 256 * 256;
-    shadow = shadow * 256 / 1000.0;
+    vec2 mapCenter = vec2(radius * sampling);
+    vec2 mapPos = mapCenter + fromScreenCenter;
+    vec2 mapPosNorm = mapPos / (2 * radius * sampling);
 
-    float diff = shadow - d;
-
-    float a = mix(0, 1, clamp(diff / 2 + 0.5, 0, 1));
-
-    // float dd = d - range;
-    // float aa = sin((clamp(dd, -blur, blur) / (blur * 2)) * 3.1415);
-
-    // return vec4(color.rgb, 1 - a * (1 - aa)); // sin((a - 0.5) * 3.1415)); // mix(a, 0, 1.0 / 255));
-    return vec4(a, a, a, 1); // sin((a - 0.5) * 3.1415)); // mix(a, 0, 1.0 / 255));
+    vec4 inputPixel = texture2D(texture, texture_coords) * color;
+    vec4 stencilPixel = texture2D(stencil, mapPosNorm);
+    float lightness = 0.3 + 0.7 * stencilPixel.r;
+    return vec4(inputPixel.rgb * lightness, inputPixel.a);
 }

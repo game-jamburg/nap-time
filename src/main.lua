@@ -9,6 +9,7 @@ require "engine"
 require "game/player"
 require "game/animation"
 require "game/camera"
+require "game/lamp"
 require "game/ui/mouse"
 require "game/ui/log"
 require "game/level"
@@ -32,14 +33,18 @@ function love.load(args)
     engine.resources:load(Resources.Image, "pirate-walk-upper", "data/gfx/anim/pirate/walk-upper.png")
     engine.resources:load(Resources.Image, "pirate-slash-upper", "data/gfx/anim/pirate/slash-upper.png")
     engine.resources:load(Resources.Image, "target", "data/gfx/target.png")
+
     engine.resources:load(Resources.Animation, "ninja-slash-upper", "ninja-slash-upper", 340, 229, 0.033, 13, {origin=Vector:new(0.48, 0.74)})
     engine.resources:load(Resources.Animation, "ninja-walk-lower", "ninja-walk-lower", 104, 128, 0.033, 21, {origin=Vector:new(0.6, 0.7)})
     engine.resources:load(Resources.Animation, "ninja-walk-upper", "ninja-walk-upper", 126, 181, 0.033, 21, {origin=Vector:new(0.6, 0.7)})
-
     engine.resources:load(Resources.Animation, "pirate-slash-upper", "pirate-slash-upper", 168, 112, 0.033, 27, {origin=Vector:new(0.34, 0.78), scaleFactor=1.25})
     engine.resources:load(Resources.Animation, "pirate-walk-lower", "pirate-walk-lower", 91, 180, 0.033, 22, {origin=Vector:new(0.5, 0.5), start=8, scaleFactor=0.8})
     engine.resources:load(Resources.Animation, "pirate-walk-upper", "pirate-walk-upper", 108, 128, 0.033, 22, {origin=Vector:new(0.34, 0.57), scaleFactor=1.5})
+
     engine.resources:load(Resources.Text,  "level01", "data/levels/level-01/mesh.lua")
+
+    engine.resources:load(Resources.Shader, "lightmap", "data/shader/lightmap.glsl")
+    engine.resources:load(Resources.Shader, "stencil", "data/shader/stencil.glsl")
 
     engine.resources:load(Resources.Font, "bold", "data/fonts/3Dumb.ttf")
     engine.resources:load(Resources.Font, "default", "data/fonts/2Dumb.ttf")
