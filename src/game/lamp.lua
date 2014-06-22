@@ -21,6 +21,28 @@ function Lamp:onAdd(entity)
     end
 end
 
+function Lamp:canSee(target)
+    local pos = self.entity.transform.global.position
+
+    if (pos-target):len() < 50 then return true end 
+
+    local world = self.entity.scene.world.physicsWorld
+
+    local visible = true
+    world:rayCast(pos.x, pos.y, target.x, target.y, function(fixture, x, y, xn, yn, fraction)
+        local physicsComponent = fixture:getUserData()
+        if physicsComponent then
+            local entity = physicsComponent.entity
+            -- ignore characters
+            if entity.components.character then return 1 end
+        end
+
+        visible = false
+        return 1
+    end)
+    return visible
+end
+
 function Lamp:onUpdate(dt)
     -- recompile the raycast texture
     local width = self.shadowMapData:getWidth()
@@ -81,4 +103,14 @@ function Lamp:onUpdate(dt)
     -- local sprite = self.entity.components[self.name .. "_sprite"]
     engine.resources.image["lightmap"] = love.graphics.newImage(self.stencil:getImageData())
     -- sprite.scaleFactor = self.sampling
+
+    -- show and hide characters
+    if isClient and client.playerName then    
+        for name, entity in pairs(self.entity.scene.entities) do
+            if entity.components.character then
+                local visible = self:canSee(entity.transform.global.position)
+                entity.enabled = visible
+            end
+        end
+    end
 end

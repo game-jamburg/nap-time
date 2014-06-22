@@ -97,6 +97,7 @@ function Character:setAnimation(animation, special)
 end
 
 function Character:strike()
+    if self.attacking then return end
     self.attacking = true
     self:setAnimation("slash")
     wait(0.033 * 13, function() self:attackEnded() end)

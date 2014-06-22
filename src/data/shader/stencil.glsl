@@ -16,7 +16,11 @@ vec4 effect(vec4 color, Image texture, vec2 texture_coords, vec2 pixel_coords) {
     vec2 mapPosNorm = mapPos / (2 * radius * sampling);
 
     vec4 inputPixel = texture2D(texture, texture_coords) * color;
+    vec4 replacePixel = vec4(vec3(0.299 * inputPixel.r + 0.587 * inputPixel.g + 0.114 * inputPixel.b) * 0.5, inputPixel.a);
+
     vec4 stencilPixel = texture2D(stencil, mapPosNorm);
-    float lightness = 0.3 + 0.7 * stencilPixel.r;
-    return vec4(inputPixel.rgb * lightness, inputPixel.a);
+    float lightness = (1-stencilPixel.r) * 0.9;
+
+    return mix(inputPixel, replacePixel, lightness);
+
 }
