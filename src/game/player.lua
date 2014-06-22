@@ -76,7 +76,7 @@ function Player:onFixedUpdate(dt)
 end
 
 function Player:onEvent(type, data)
-    if type == "mousereleased" and data.button == "l" and not self.attacking then
+    if type == "mousereleased" and data.button == "l" and not self.attacking and not self:getCharacter().dead then
         self.attacking = true
         self:getCharacter():setAnimation("slash")
         local attackFrames = (self:getCharacter().type == "ninja") and 13 or 17
@@ -91,7 +91,7 @@ end
 
 function Player:strike()
     for key, entity in pairs(engine:getCurrentState().scene.entities) do
-        if entity:hasComponent(character) and not entity:hasComponent(player) then
+        if entity:hasComponent(Character) and not entity:hasComponent(player) then
             local pos = self.entity.components.transform.position
 
             local otherpos = entity.components.transform.position - pos
@@ -99,7 +99,7 @@ function Player:strike()
 
             local distance = math.sqrt((otherpos.x)^2+(otherpos.y)^2)
 
-            local mousepos = self.entity.scene.view:toLocal(mouse.position) - pos
+            local mousepos = self.entity.scene.view:toLocal(Mouse.Position) - pos
             local mousedeg = math.atan2(mousepos.x, mousepos.y) + math.pi
 
             local degdiff = math.abs(mousedeg - otherdeg)

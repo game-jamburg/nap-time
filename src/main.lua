@@ -80,11 +80,6 @@ function initLevel()
     ninja:addComponent(Character:new("character", "Ninj'arrr", nil, "ninja"))
     ninja:addComponent(Physics:new("physics", function() return love.physics.newCircleShape(30), 0, 20, 1 end))
 
-    shadow = ninja:addComponent(Sprite:new("shadow", "blur"))
-    shadow.color = Color:new(0, 0, 0, 0.5)
-    shadow.order = 1
-    shadow.scaleFactor = 0.3
-
     if isServer then
         availablePlayers = {"ninja"}
     end

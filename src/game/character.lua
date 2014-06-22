@@ -27,6 +27,11 @@ function Character:onAdd(entity)
         entity.children.lower:addComponent(lowerAnimation)
     end
 
+    local shadow = ninja:addComponent(Sprite:new("shadow", "blur"))
+    shadow.color = Color:new(0, 0, 0, 0.5)
+    shadow.order = 1
+    shadow.scaleFactor = 0.3
+
     if not entity.components.physics then
         self.entity:addComponent(Physics:new("physics", function() return love.physics.newCircleShape(50), 0, 0, 1 end))
     end
@@ -42,10 +47,15 @@ end
 
 function Character:damage(amount)
     self.health = self.health - amount
-    print(self.name .. " took " .. amount .. " damage")
+    Log:info(self.name .. " took " .. amount .. " damage")
     if self.health <= 0 then
         self.dead = true
-        print(self.name .. " died")
+        self.entity.children.upper.components.animation = nil
+        self.entity.children.lower.components.animation = nil
+        self.entity.children.label.components.text = nil
+        self.entity.components.shadow = nil
+        self.entity.components.physics = nil
+        Log:info("Character died.")
     end
 end
 
@@ -53,9 +63,7 @@ function Character:setAnimation(animation, special)
     local lower = self.entity.children.lower.components.animation
     local upper = self.entity.children.upper.components.animation
 
-    if not lower or not upper then
-        return
-    end
+    if not (lower and upper) then return end
 
     if animation == "walk" then
         local backwards = special
