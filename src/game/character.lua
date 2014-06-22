@@ -48,13 +48,14 @@ end
 function Character:damage(amount)
     self.health = self.health - amount
     Log:info(self.name .. " took " .. amount .. " damage")
-    if self.health <= 0 then
+    if self.health <= 0 and not self.dead then
         self.dead = true
         self.entity.children.upper.components.animation = nil
         self.entity.children.lower.components.animation = nil
         self.entity.children.label.components.text = nil
         self.entity.components.shadow = nil
         self.entity.components.physics = nil
+        
         Log:info("Character died.")
     end
 end

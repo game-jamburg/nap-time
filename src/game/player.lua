@@ -72,7 +72,7 @@ function Player:onFixedUpdate(dt)
     self.entity.transform.position = self.entity.transform.position + self.movement * self.speed * dt
 
     -- tell the physics we changed stuff :)
-    self.entity.components.physics:pull()
+    if self.entity.components.physics then self.entity.components.physics:pull() end
 end
 
 function Player:onEvent(type, data)
@@ -91,7 +91,7 @@ end
 
 function Player:strike()
     for key, entity in pairs(engine:getCurrentState().scene.entities) do
-        if entity:hasComponent(Character) and not entity:hasComponent(player) then
+        if entity:hasComponent(Character) and not entity:hasComponent(Player) then
             local pos = self.entity.components.transform.position
 
             local otherpos = entity.components.transform.position - pos

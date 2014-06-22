@@ -13,22 +13,17 @@ function createScore()
     score = State:new()
     score.scene.view = View:new()
 
-    background = score.scene:addEntity(Entity:new("background"))
+    local background = score.scene:addEntity(Entity:new("background"))
     background:addComponent(Score:new("score", {{"Caro",5, true},{"Rafael",7, false},{"Paul",7,true},{"Damian",8,true}, {"Blubb",2,true}}, "pirates"))
-
-
+    score.scene.background = background
 end
 
 function createMenu()
-
     menu = State:new()
     menu.scene.view = View:new()
 
-    schubidu = menu.scene:addEntity(Entity:new("schubidu"))
-    schubidu:addComponent(Menu:new("menu"))
-
-
-
+    local menuEntity = menu.scene:addEntity(Entity:new("menu"))
+    menuEntity:addComponent(Menu:new("menu"))
 end
 
 function love.keypressed(key)
@@ -36,7 +31,6 @@ function love.keypressed(key)
         state.scene:save("saved-level.lua")
     elseif key == "f5" then
         state:setScene(Scene.load("saved-level.lua"))
-    
     end
 end
 
