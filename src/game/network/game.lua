@@ -44,7 +44,8 @@ function GameState:sendUpdateTopLevelEntity(entity, target)
     function filter(obj)
         if type(obj) == "table" and obj.isInstanceOf then
             return not(obj:isInstanceOf(Animation) or obj:isInstanceOf(Player)
-                       or obj:isInstanceOf(Camera))
+                       or obj:isInstanceOf(Camera) or obj:isInstanceOf(Lamp)
+                       or obj:isInstanceOf(Text))
         else
             return true
         end
@@ -52,5 +53,7 @@ function GameState:sendUpdateTopLevelEntity(entity, target)
 
     msg = string.format("updateTopLevelEntity %s",
         serialize({entity.name, entity}, 0, filter))
-    self:enqueue("updateTopLevelEntity " .. entity.name, msg, target)
+    local queue_tag = "updateTopLevelEntity " .. entity.name
+    if target then queue_tag = target .. queue_tag end
+    self:enqueue(queue_tag, msg, target)
 end

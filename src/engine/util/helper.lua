@@ -52,6 +52,13 @@ function table.removeValue(table, value)
     end
 end
 
+function table.size(table)
+    local i = 0
+    for _, _ in pairs(table) do
+        i = i + 1
+    end
+end
+
 function math.floorTo(k, t)
     return math.floor(k / t) * t
 end

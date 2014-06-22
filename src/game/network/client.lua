@@ -80,6 +80,7 @@ function Client:onMessage(type, data)
                 player.target = target.transform
             end
         end
+
     elseif type == "welcome" then
         if not self.playerName then
             Log:info("You are now '" .. data .. "'")
@@ -87,7 +88,10 @@ function Client:onMessage(type, data)
         elseif self.playerName ~= data then
             Log:error("Recieved additional welcome", data)
         end
+    elseif type == "kill" then
+        love.event.push("quit")
     end
+
 end
 
 function Client:requestSnapshot()

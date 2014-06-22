@@ -63,8 +63,12 @@ end
 function Server:sendWelcome(id)
     local playerName = nil
     if not self.clients[id] then
+        if #availablePlayers == 0 then
+            self:sendKill(id)
+            return
+        end
         repeat
-            local i = math.floor(randf(1,#availablePlayers + 0.99))
+            local i = math.floor(randf(1, #availablePlayers + 0.99))
             playerName = availablePlayers[i]
         until playerName ~= nil
         table.removeValue(availablePlayers, playerName)
@@ -76,7 +80,11 @@ function Server:sendWelcome(id)
         Log:debug("Resend welcome to '" .. playerName .. "'")
     end
     local msg = string.format("welcome \"%s\"", playerName)
-    self:enqueue(msg, msg, id)
+    self:enqueue(id .. " " .. msg, msg, id)
+end
+
+function Server:sendKill(id)
+    self:enqueue(id .. "kill", "kill", id)
 end
 
 function Server:onMessage(id, type, data)

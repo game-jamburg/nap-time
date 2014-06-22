@@ -17,3 +17,12 @@ function serverDraw()
     end
     love.graphics.print(info, 10, 40)
 end
+
+
+function love.keypressed(key)
+    if key == "k" then
+        for id, _ in pairs(server.clients) do
+            server:sendKill(id)
+        end
+    end
+end
