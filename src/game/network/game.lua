@@ -30,6 +30,7 @@ function GameState:send(data, target)
 end
 
 function GameState:splitMessage(msg)
+    msg = libc:Decompress(msg)
     local type, payload = msg:match("^(%S+) (.+)$")
     if type then
         return type, payload

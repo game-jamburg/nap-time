@@ -51,3 +51,8 @@ function Component:apply(component)
 end
 
 function Component:onApply(component) end
+
+function Component:sendRpc(func, ...)
+    local msg = "rpc " .. serialize({entity=self.entity.name, component=self.name, func=func, params={...}})
+    client:enqueue(msg, msg)
+end
