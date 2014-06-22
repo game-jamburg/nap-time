@@ -5,6 +5,7 @@ function loadState()
     return server
 end
 
-function love.draw()
-    love.graphics.print("Server running...", 10, 10)
+function serverDraw()
+    love.graphics.print("Server running on " .. server.server.port, 10, 10)
+    love.graphics.print("Clients: " .. serialize(server.clients), 10, 40)
 end

@@ -59,6 +59,9 @@ function Player:onFixedUpdate(dt)
             sync = true
         end
         self.previousAngle = angle
+        if sync then
+            client:syncTopLevelEntity(self.entity)
+        end
     end    
 
     -- update position
@@ -66,11 +69,6 @@ function Player:onFixedUpdate(dt)
 
     -- tell the physics we changed stuff :)
     self.entity.components.physics:pull()
-
-    -- update network
-    if isClient and sync then
-        client:syncTopLevelEntity(self.entity)
-    end
 end
 
 function Player:onEvent(type, data)

@@ -48,13 +48,18 @@ end
 function Client:onMessage(type, data)
     Log:verbose("Client received message of type " .. type)
     if type == "updateTopLevelEntity" then
+        if not self.playerName then
+            Log:warning("Received update before welcome")
+            self:requestWelcome()
+        end
+
         self.scene:updateEntity(data[1], data[2], true)
 
         -- now, make sure we own our player
-        if data[1] == "ninja" then
-            local ninja = self.scene.entities.ninja
-            if not ninja.components.player then
-                player = ninja:addComponent(Player:new("player"))
+        if data[1] == self.playerName then
+            self.playerEntity = self.scene.entities[self.playerName]
+            if not self.playerEntity.components.player then
+                player = self.playerEntity:addComponent(Player:new("player"))
 
                 -- also, add the mouse target stuff
                 target = self.scene:addEntity(Entity:new("target"))
@@ -68,11 +73,22 @@ function Client:onMessage(type, data)
                 player.target = target.transform
             end
         end
+    elseif type == "welcome" then
+        if not self.playerName then
+            Log:info("You are now '" .. data .. "'")
+            self.playerName = data
+        else
+            Log:error("Recieved additional welcome", data)
+        end
     end
 end
 
 function Client:requestSnapshot()
     self:enqueue("requestSnapshot")
+end
+
+function Client:requestWelcome()
+    self:enqueue("requestWelcome")
 end
 
 function Client:syncComponent(component)
@@ -83,6 +99,5 @@ function Client:syncComponent(component)
 end
 
 function Client:syncTopLevelEntity(entity)
-    Log:verbose("Send", "syncTopLevelEntity", entity.name)
     self:sendUpdateTopLevelEntity(entity)
 end

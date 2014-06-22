@@ -79,10 +79,18 @@ function initLevel()
     shadow.order = 1
     shadow.scaleFactor = 0.3
 
+    if isServer then
+        availablePlayers = {"ninja"}
+    end
+
     -- Test Enemy
     local names = {"John", "Captain Silver", "Barnacle", "William"}
     for i=1,4 do
-        enemy = state.scene:addEntity(Entity:new("pirate-" .. i))
+        local pirateName = "pirate-" .. i
+        if isServer then
+            table.insert(availablePlayers, pirateName)
+        end
+        enemy = state.scene:addEntity(Entity:new(pirateName))
         enemy.transform.position = Vector:new(500 + 200 * i, 1900)
         shadow = enemy:addComponent(Sprite:new("shadow", "blur"))
         shadow.color = Color:new(0, 0, 0, 0.5)

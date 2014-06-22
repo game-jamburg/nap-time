@@ -5,8 +5,5 @@ function PositionByMouse:onUpdate(dt)
     local pos = view and view:toLocal(Mouse.Position) or Mouse.Position
     if pos ~= self.entity.transform.position then
        self.entity.transform.position = pos
-       if isClient then
-           client:syncTopLevelEntity(client.scene.entities.ninja)
-       end
     end
 end

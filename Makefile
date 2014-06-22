@@ -8,5 +8,5 @@ server:
 
 both:
 	love src/ --server&
-	sleep 0.1
+	sleep 0.2
 	love src/ &
