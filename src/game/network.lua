@@ -33,8 +33,7 @@ function Server:onConnect(id)
 end
 
 function Server:onReceive(data, id)
-    Log:debug("Data received: " .. id .. " > " .. data)
-    -- self.server:send("you sent me stuff", id)
+    -- Log:verbose("Data received: " .. id .. " > " .. data)
 
     local type, payload = splitMessage(data)
     if payload then
@@ -72,7 +71,7 @@ function Server:onMessage(id, type, data)
     elseif type == "updateTopLevelEntity" then
         self.scene:updateEntity(data[1], data[2])
     end
-    Log:verbose("Recieved " .. type .. " from client " .. id)
+    Log:debug("Recieved", type, "from", id)
 end
 
 
@@ -153,18 +152,19 @@ function Client:requestSnapshot()
 end
 
 function Client:syncComponent(component)
+    Log:verbose("Send", "syncComponent", component.entity.name, component.name)
     msg = string.format("updateComponent %s",
         serialize({component.entity.name, component}))
     self:enqueue(msg)
 end
 
 function Client:syncTopLevelEntity(entity)
+    Log:verbose("Send", "syncTopLevelEntity", entity.name)
     msg = string.format("updateTopLevelEntity %s",
         serialize({entity.name, entity}))
     self:enqueue(msg)
 end
 
 function Client:enqueue(msg)
-    -- Log:verbose("Enqueued message", msg)
     table.insert(self.msgQueue, msg)
 end

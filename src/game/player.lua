@@ -56,7 +56,7 @@ function Player:onFixedUpdate(dt)
     local mouse = view and view:toLocal(Mouse.Position) or Mouse.Position
     local lookDirection = mouse - self.entity.transform.position
     local angle = lookDirection:angle()
-    if self.previousAngle == nil or angle ~= self.previousAngle then
+    if (self.previousAngle == nil or angle ~= self.previousAngle) and isClient then
         self.entity.children.upper.transform.rotation = angle
         sync = true
     end
