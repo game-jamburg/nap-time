@@ -1,6 +1,6 @@
 Score = class("Score", Drawable)
 
-function Score:initialize(name, players,team)
+function Score:initialize(name, players, team)
     Drawable.initialize(self, name)
     self.team = team
     self.players = players

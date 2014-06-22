@@ -72,7 +72,7 @@ function Player:onFixedUpdate(dt)
     self.entity.transform.position = self.entity.transform.position + self.movement * self.speed * dt
 
     -- tell the physics we changed stuff :)
-    self.entity.components.physics:pull()
+    if self.entity.components.physics then self.entity.components.physics:pull() end
 end
 
 function Player:onEvent(type, data)
