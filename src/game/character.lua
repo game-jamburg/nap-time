@@ -51,6 +51,10 @@ function Character:setAnimation(animation, special)
     local lower = self.entity.children.lower.components.animation
     local upper = self.entity.children.upper.components.animation
 
+    if not lower or not upper then
+        return
+    end
+
     if animation == "walk" then
         local backwards = special
         lower:set(self.type .. "-walk-lower", backwards and 0.6 or 1)

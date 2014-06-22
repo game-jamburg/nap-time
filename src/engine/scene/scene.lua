@@ -60,8 +60,8 @@ function Scene:leave()
     self.current = false
 end
 
-function Scene:serialize(depth)
-    return 'define(Scene) ' .. serialize(self.name) .. ' ' .. serialize(self.entities, depth)
+function Scene:serialize(depth, filter)
+    return 'define(Scene) ' .. serialize(self.name, 0, filter) .. ' ' .. serialize(self.entities, depth, filter)
 end
 
 function Scene.static.load(filename)

@@ -23,6 +23,9 @@ end
  
 function Player:onFixedUpdate(dt)
     if isClient then
+        if self.entity.name ~= client.playerName then
+            Log:error("WTF", self.entity.name, client.playerName)
+        end
         local sync = false
 
         local input = Vector:new()
