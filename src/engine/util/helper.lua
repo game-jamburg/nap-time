@@ -44,6 +44,15 @@ function randf(from, to)
     end
 end
 
+function table.shuffle(array)
+    local arrayCount = #array
+    for i = arrayCount, 2, -1 do
+        local j = math.random(1, i)
+        array[i], array[j] = array[j], array[i]
+    end
+    return array
+end
+
 function table.removeValue(table, value)
     for k,v in pairs(table) do
         if v == value then

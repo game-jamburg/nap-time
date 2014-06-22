@@ -66,10 +66,7 @@ function Server:sendWelcome(id)
             self:sendKill(id)
             return
         end
-        repeat
-            local i = math.floor(randf(1, #availablePlayers + 0.99))
-            playerName = availablePlayers[i]
-        until playerName ~= nil
+        playerName = availablePlayers[#availablePlayers]
         table.removeValue(availablePlayers, playerName)
 
         Log:info("Send welcome to new player '" .. playerName .. "'")

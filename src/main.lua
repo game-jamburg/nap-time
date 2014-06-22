@@ -105,6 +105,10 @@ function initLevel()
         enemy.children.upper.transform.rotation = math.pi
         enemy.components.physics:pull()
     end
+
+    if isServer then
+        table.shuffle(availablePlayers)
+    end
     
     -- UI TEST 
     if isClient then
