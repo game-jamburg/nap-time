@@ -23,7 +23,7 @@ function Resources:load(type, name, path, ...)
         res = love.filesystem.read(path)
     elseif type == Resources.Animation then
         local args = {...}
-        res = {image=path, frameWidth=args[1], frameHeight=args[2], delay=args[3], frames=args[4], mode=args[5]}
+        res = {image=path, frameWidth=args[1], frameHeight=args[2], delay=args[3], frames=args[4], args=args[5] or {}}
     else
         print("Unknown resource type '" .. type .. "' for resource '" .. name .. "' at '" .. path .. "'.")
         return nil

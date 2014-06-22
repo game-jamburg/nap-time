@@ -25,10 +25,17 @@ function love.load()
     engine.resources:load(Resources.Image, "ninja-walk-lower", "data/gfx/anim/ninja/walk-lower.png")
     engine.resources:load(Resources.Image, "ninja-walk-upper", "data/gfx/anim/ninja/walk-upper.png")
     engine.resources:load(Resources.Image, "ninja-slash-upper", "data/gfx/anim/ninja/slash-upper.png")
+    engine.resources:load(Resources.Image, "pirate-walk-lower", "data/gfx/anim/pirate/walk-lower.png")
+    engine.resources:load(Resources.Image, "pirate-walk-upper", "data/gfx/anim/pirate/walk-upper.png")
+    engine.resources:load(Resources.Image, "pirate-slash-upper", "data/gfx/anim/pirate/slash-upper.png")
     engine.resources:load(Resources.Image, "target", "data/target.png")
-    engine.resources:load(Resources.Animation, "ninja-slash-upper", "ninja-slash-upper", 340, 229, 0.033, 13)
-    engine.resources:load(Resources.Animation, "ninja-walk-lower", "ninja-walk-lower", 104, 128, 0.033, 21)
-    engine.resources:load(Resources.Animation, "ninja-walk-upper", "ninja-walk-upper", 126, 181, 0.033, 21)
+    engine.resources:load(Resources.Animation, "ninja-slash-upper", "ninja-slash-upper", 340, 229, 0.033, 13, {origin=Vector:new(0.48, 0.74)})
+    engine.resources:load(Resources.Animation, "ninja-walk-lower", "ninja-walk-lower", 104, 128, 0.033, 21, {origin=Vector:new(0.6, 0.7)})
+    engine.resources:load(Resources.Animation, "ninja-walk-upper", "ninja-walk-upper", 126, 181, 0.033, 21, {origin=Vector:new(0.6, 0.7)})
+
+    engine.resources:load(Resources.Animation, "pirate-slash-upper", "pirate-slash-upper", 168, 112, 0.033, 27, {origin=Vector:new(0.48, 0.74)})
+    engine.resources:load(Resources.Animation, "pirate-walk-lower", "pirate-walk-lower", 91, 180, 0.033, 22, {origin=Vector:new(0.5, 0.5), start=8})
+    engine.resources:load(Resources.Animation, "pirate-walk-upper", "pirate-walk-upper", 108, 128, 0.033, 22, {origin=Vector:new(0.5, 0.5)})
     engine.resources:load(Resources.Text,  "level01", "data/levels/level-01/mesh.lua")
 
     state = State:new()
@@ -48,13 +55,12 @@ function love.load()
     player = state.scene:addEntity(Entity:new("player")) 
     player.transform.position = Vector:new(1000, 2000)
 
-    player:addComponent(Character:new("character", "Ninj'arrr"))
+    player:addComponent(Character:new("character", "Ninj'arrr", nil, "ninja"))
 
     player:addComponent(Player:new("player"))
     player:addComponent(SyncTransform:new("SyncTransform"))
     player.components.player.target = mouseTarget.transform
     player:addComponent(Camera:new("playercam"))
-    player:addComponent(Physics:new("physics", function() return love.physics.newCircleShape(30), 0, 20, 1 end))
 
     shadow = player:addComponent(Sprite:new("shadow", "blur"))
     shadow.color = Color:new(0, 0, 0, 0.5)
@@ -62,13 +68,19 @@ function love.load()
     shadow.scaleFactor = 0.3
 
     -- Test Enemy
-    enemy = state.scene:addEntity(Entity:new("enemy"))
-    enemy.transform.position = Vector:new(1000, 1800)
-    shadow = enemy:addComponent(Sprite:new("shadow", "blur"))
-    shadow.color = Color:new(0, 0, 0, 0.5)
-    shadow.order = 1
-    shadow.scaleFactor = 0.3
-    enemy:addComponent(Character:new("character", "Test Pirate"))
+    local names = {"John", "Captain Silver", "Barnacle", "William"}
+    for i=1,4 do
+        enemy = state.scene:addEntity(Entity:new("enemy"))
+        enemy.transform.position = Vector:new(500 + 200 * i, 1900)
+        shadow = enemy:addComponent(Sprite:new("shadow", "blur"))
+        shadow.color = Color:new(0, 0, 0, 0.5)
+        shadow.order = 1
+        shadow.scaleFactor = 0.3
+        enemy:addComponent(Character:new("character", names[i], nil, "pirate"))
+        enemy.children.lower.transform.rotation = math.pi
+        enemy.children.upper.transform.rotation = math.pi
+        enemy.components.physics:pull()
+    end
     
     -- test menu button
     butten = state.scene:addEntity(Entity:new("butten"))
@@ -85,11 +97,7 @@ function love.load()
 end
 
 function love.keypressed(key)
-    if key == " " then
-        state.scene:save("saved-level.lua")
-    elseif key == "f5" then
-        state:setScene(Scene.load("saved-level.lua"))
-    elseif key == "f1" and engine:getCurrentState() == state then
+    if key == "f1" and engine:getCurrentState() == state then
         engine:pushState(menu)
     end 
 end

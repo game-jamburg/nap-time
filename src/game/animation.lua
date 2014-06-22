@@ -1,10 +1,8 @@
 Animation = class("Animation", Sprite)
 
-function Animation:initialize(name, animation)
+function Animation:initialize(name, animation, speed, mode)
     Sprite.initialize(self, name, image)
-    self.animation = animation
-    self.mode = mode or "loop"
-    self.speed = 1
+    self:set(animation, speed, mode)
 
     self:addProperty(Property.String:new(self, "animation"))
     self:addProperty(Property.Number:new(self, "speed"))
@@ -21,13 +19,32 @@ function Animation:onUpdate(dt)
     end
 end
 
+function Animation:set(animation, speed, mode)
+    self.animation = animation
+    self.speed = speed or 1
+    self.mode = mode or "loop"
+end
+
 function Animation:onDraw()
     if not self.anim or (self.anim.name ~= self.animation) then
-        local args = engine.resources.animation[self.animation]
-        local img = engine.resources.image[args.image]
-        self.anim = newAnimation(img, args.frameWidth, args.frameHeight, args.delay, args.frames)
-        if args.mode then self.anim:setMode(args.mode) end
+        local data = engine.resources.animation[self.animation]
+        if not data then return end -- not found
+        local args = data.args
+        local img = engine.resources.image[data.image]
+        self.anim = newAnimation(img, data.frameWidth, data.frameHeight, data.delay, data.frames)
         self.anim.name = self.animation
+
+        if args.mode then 
+            self.anim:setMode(args.mode) 
+        end
+
+        if args.origin then 
+            self.origin = args.origin
+        end
+
+        if args.start then 
+            self.anim:seek(args.start)
+        end
     end
 
     local origin   = self.origin:permul(Vector:new(self.anim.fw, self.anim.fh))

@@ -9,17 +9,11 @@ function Player:initialize(name)
 end
 
 function Player:onAdd(entity)
-    self.lowerAnimation = Animation:new("animation", "ninja-walk-lower")
-    self.lowerAnimation.origin = Vector:new(0.6, 0.7)
-    self.lowerAnimation.order = 1
-    entity.children.lower:addComponent(self.lowerAnimation)
-
-    self.upperAnimation = Animation:new("animation", "ninja-walk-upper")
-    self.upperAnimation.origin = Vector:new(0.6, 0.7)
-    self.upperAnimation.order = 2
-    entity.children.upper:addComponent(self.upperAnimation)
-
     self.movement = Vector:new()
+end
+
+function Player:getCharacter()
+    return self.entity.components.character
 end
  
 function Player:onFixedUpdate(dt)
@@ -35,14 +29,8 @@ function Player:onFixedUpdate(dt)
     
     local standing = self.movement:len() < 0.1
 
-    if standing then
-        self.entity.children.lower.components.animation.speed = 0
-        if self.entity.children.upper.components.animation == self.upperWalk then
-            self.entity.children.upper.components.animation.speed = 0.6
-        end
-    else 
-        self.entity.children.lower.components.animation.speed = 1
-        self.entity.children.upper.components.animation.speed = 1
+    if not self.attacking then
+        self:getCharacter():setAnimation(standing and "idle" or "walk")
     end
 
     -- update position
@@ -66,10 +54,13 @@ end
 function Player:onEvent(type, data)
     if type == "mousereleased" and data.button == "l" and not self.attacking then
         self.attacking = true
-        self.upperAnimation.animation = "ninja-slash-upper"
-        self.upperAnimation.origin = Vector:new(0.48, 0.74)
+        self:getCharacter():setAnimation("slash")
         wait(0.033 * 13, function() self:attackEnded() end)
         self:strike()
+    elseif type == "keypressed" then
+        if data.key == " " then
+            self:getCharacter().type = (self:getCharacter().type == "ninja") and "pirate" or "ninja"
+        end
     end
 end
 
@@ -103,8 +94,4 @@ end
 
 function Player:attackEnded()
     self.attacking = false
-    self.lowerAnimation.animation = "ninja-walk-lower"
-    self.upperAnimation.animation = "ninja-walk-upper"
-    self.lowerAnimation.origin = Vector:new(0.6, 0.7)
-    self.upperAnimation.origin = Vector:new(0.6, 0.7)
 end
