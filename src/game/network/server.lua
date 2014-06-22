@@ -7,6 +7,7 @@ function Server:initialize()
 end
 
 function Server:send(data, target)
+    data = libc:Compress(data)
     self.server:send(data, target)
 end
 

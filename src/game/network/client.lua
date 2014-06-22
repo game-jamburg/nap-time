@@ -8,6 +8,7 @@ function Client:initialize()
 end
 
 function Client:send(data)
+    data = libc:Compress(data)
     self.client:send(data)
 end
 

@@ -3,6 +3,9 @@ tween = require("engine/external/tween")
 class = require("engine/external/middleclass")
 anal = require("engine/external/AnAL")
 lube = require("engine/external/LUBE")
+require "engine/external/LibCompress/lib/LibStub/LibStub"
+require "engine/external/LibCompress/LibCompress"
+libc = LibStub:GetLibrary("LibCompress")
 
 require "engine"
 
