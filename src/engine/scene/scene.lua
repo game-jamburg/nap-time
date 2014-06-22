@@ -23,11 +23,8 @@ function Scene:addEntity(entity)
     end
 
     if entity.scene == self then return end
-    if entity.scene then
-        entity.scene:removeEntity(entity)
-    end
 
-    table.insert(self.entities, entity)
+    self.entities[entity.name] = entity
     entity.scene = self
     entity:onAdd(self)
     return entity
@@ -63,17 +60,6 @@ function Scene:leave()
     self.current = false
 end
 
-
-function Scene:getRootEntities()
-    local root = {}
-    for k, v in pairs(self.entities) do
-        if not v.parent then
-            table.insert(root, v)
-        end    
-    end
-    return root
-end
-
 function Scene:serialize(depth)
     return 'define(Scene) ' .. serialize(self.name) .. ' ' .. serialize(self.entities, depth)
 end
@@ -90,5 +76,33 @@ function Scene:save(filename)
         Log:debug("Saved scene " .. self.name .. " to [" .. filename .. "].")
     else
         Log:error("Could not save scene " .. self.name .. " to [" .. filename .. "]: " .. err)
+    end
+end
+
+function Scene:apply(scene)
+    for _, entity in pairs(scene.entities) do
+        if self.entities[entity.name] then
+            self.entities[entity.name]:apply(entity)
+        else
+            self:addEntity(entity)
+        end
+    end
+end
+
+function Scene:updateComponent(entityName, component)
+    local entity = self.entities[entityName]
+    if entity then
+        entity.components[component.name] = component
+    else
+        Log:error("Scene:updateComponent", "Does not exist", entityName, component)
+    end
+end
+
+function Scene:updateEntity(name, data)
+    local entity = self.entities[name]
+    if entity then
+        entity:apply(data)
+    else
+        Log:error("Scene:updateEntity", "Does not exist", name)
     end
 end

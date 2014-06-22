@@ -11,19 +11,19 @@ function Character:onAdd(entity)
     if not entity.children.upper then
         self.upper = entity:addChild(Entity:new("upper"))
 
-        self.upperAnimation = Animation:new("animation", "none")
-        self.upperAnimation.origin = Vector:new(0.6, 0.7)
-        self.upperAnimation.order = 2
-        entity.children.upper:addComponent(self.upperAnimation)
+        local upperAnimation = Animation:new("animation", "none")
+        upperAnimation.origin = Vector:new(0.6, 0.7)
+        upperAnimation.order = 2
+        entity.children.upper:addComponent(upperAnimation)
     end
 
     if not entity.children.lower then
         self.lower = entity:addChild(Entity:new("lower"))
 
-        self.lowerAnimation = Animation:new("animation", "none")
-        self.lowerAnimation.origin = Vector:new(0.6, 0.7)
-        self.lowerAnimation.order = 1
-        entity.children.lower:addComponent(self.lowerAnimation)
+        local lowerAnimation = Animation:new("animation", "none")
+        lowerAnimation.origin = Vector:new(0.6, 0.7)
+        lowerAnimation.order = 1
+        entity.children.lower:addComponent(lowerAnimation)
     end
 
     if not entity.components.physics then
@@ -48,14 +48,17 @@ function Character:damage(amount)
 end
 
 function Character:setAnimation(animation, special)
+    local lower = self.entity.children.lower.components.animation
+    local upper = self.entity.children.upper.components.animation
+
     if animation == "walk" then
         local backwards = special
-        self.lowerAnimation:set(self.type .. "-walk-lower", backwards and 0.6 or 1)
-        self.upperAnimation:set(self.type .. "-walk-upper", backwards and 0.6 or 1)
+        lower:set(self.type .. "-walk-lower", backwards and 0.6 or 1)
+        upper:set(self.type .. "-walk-upper", backwards and 0.6 or 1)
     elseif animation == "idle" then
-        self.lowerAnimation:set(self.type .. "-walk-lower", 0)
-        self.upperAnimation:set(self.type .. "-walk-upper", 0)
+        lower:set(self.type .. "-walk-lower", 0)
+        upper:set(self.type .. "-walk-upper", 0)
     elseif animation == "slash" then
-        self.upperAnimation:set(self.type .. "-slash-upper", 1, "once")
+        upper:set(self.type .. "-slash-upper", 1, "once")
     end
 end

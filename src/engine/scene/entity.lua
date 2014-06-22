@@ -6,7 +6,6 @@ function Entity:initialize(name)
     end
     self.name = name
     self.components = {}
-    self.typedComponents = {}
     self.parent = nil
     self.children = {}
 
@@ -20,9 +19,11 @@ function Entity:restore(data)
         elseif element:isInstanceOf(Component) then
             self:addComponent(element)
         else
-            Log:error("Invalid element type in Entity data:", element)
+            Log:error("Invalid type in entity child list: " .. element)
         end
     end
+
+    -- hacky
     self.transform = self.components.transform
 end
 
@@ -30,17 +31,26 @@ function Entity:update(dt)
     for i, component in pairs(self.components) do
         component:update(dt)
     end
+    for i, child in pairs(self.children) do
+        child:update(dt)
+    end
 end
 
 function Entity:fixedupdate(dt)
     for i, component in pairs(self.components) do
         component:fixedupdate(dt)
     end
+    for i, child in pairs(self.children) do
+        child:fixedupdate(dt)
+    end
 end
 
 function Entity:onEvent(type, data) 
     for i, component in pairs(self.components) do
         if component:onEvent(type, data) then return true end
+    end
+    for i, child in pairs(self.children) do
+        if child:onEvent(type, data) then return true end
     end
 end
 
@@ -49,11 +59,11 @@ function Entity:addComponent(component)
         error("Entity:addComponent requires instance of Component")
     end
     self.components[component.name] = component
-    
-    if not self.typedComponents[component.class]then
-        self.typedComponents[component.class] = {}
+
+    -- this is the only hard link
+    if component.name == "transform" then
+        self.transform = component
     end
-    table.insert(self.typedComponents[component.class], component)
     
     component:added(self)
     return component
@@ -69,16 +79,16 @@ end
 function Entity:onAdd(scene)
     self.scene = scene
     for _, child in pairs(self.children) do
-        scene:addEntity(child)
+        child:onAdd(scene)
     end
 end
 
 function Entity:addChild(entity)
-    if self.scene then
-        self.scene:addEntity(entity)
-    end
     entity.parent = self
     self.children[entity.name] = entity
+    if self.scene then
+        entity:onAdd(self.scene)
+    end
     return entity
 end
 
@@ -91,5 +101,34 @@ function Entity:detach()
 end
 
 function Entity:serialize(depth)
-    return 'define(Entity) ' .. serialize(self.name) .. ' ' .. serialize(self.components, depth)
+    local elements = {}
+    for i, component in pairs(self.components) do
+        table.insert(elements, component)
+    end
+    for i, child in pairs(self.children) do
+        table.insert(elements, child)
+    end
+
+    return 'define(Entity) ' .. serialize(self.name) .. ' ' .. serialize(elements, depth)
+end
+
+function Entity:apply(entity)
+    Log:debug("Applying entity", self.name)
+
+    for _, child in pairs(entity.children) do
+        if self.children[child.name] then
+            self.children[child.name]:apply(child)
+        else
+            self:addChild(child)
+        end
+    end
+    
+    for _, component in pairs(entity.components) do
+        if self.components[component.name] then
+            self.components[component.name]:apply(component)
+        else
+            self:addComponent(component)
+        end
+    end
+
 end

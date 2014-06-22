@@ -1,8 +1,8 @@
 socket = require("socket")
 tween = require("engine/external/tween")
 class = require("engine/external/middleclass")
-
 anal = require("engine/external/AnAL")
+lube = require("engine/external/LUBE")
 
 require "engine"
 
@@ -15,11 +15,12 @@ require "game/level"
 require "game/positionbymouse"
 require "game/character"
 require "game/menubutton"
+require "game/network"
 require "game/score"
 
 engine = Engine:new()
 
-function love.load()
+function love.load(args)
     engine.resources:load(Resources.Image, "background", "data/gfx/gruen.jpg")
     engine.resources:load(Resources.Image, "blur", "data/gfx/blur.png")
     engine.resources:load(Resources.Image, "level01", "data/levels/level-01/background.png")
@@ -40,33 +41,40 @@ function love.load()
     engine.resources:load(Resources.Text,  "level01", "data/levels/level-01/mesh.lua")
 
     state = State:new()
-    menu = State:new()
-    menu.scene.view = View:new()
     
-    -- Mouse target
-    mouseTarget = state.scene:addEntity(Entity:new("mousetarget"))
-    mouse_ui = mouseTarget:addComponent(MouseUI:new("mouse_ui", "target"))
-    mouse_ui.scale = Vector:new(0.2,0.2)
-    mouseTarget:addComponent(PositionByMouse:new("positionbymouse"))
+    isServer = (args[2] == "--server")
+    isClient = not isServer
 
+    if isServer then
+        require "server"
+    else
+        require "client"
+    end
+    engine:subscribe()
+
+    state = loadState()
+    engine:pushState(state)
+
+    initLevel()
+end
+
+
+function initLevel()
+    -- create the level
     level = state.scene:addEntity(Entity:new("level"))
     ship = level:addComponent(Level:new("level"))
 
-    -- Player
-    player = state.scene:addEntity(Entity:new("player")) 
-    player.transform.position = Vector:new(1000, 2000)
+    -- Ninja
+    ninja = state.scene:addEntity(Entity:new("ninja")) 
+    ninja.transform.position = Vector:new(1000, 2000)
+    ninja:addComponent(Character:new("character", "Ninj'arrr", nil, "ninja"))
+    ninja:addComponent(Physics:new("physics", function() return love.physics.newCircleShape(30), 0, 20, 1 end))
 
-    player:addComponent(Character:new("character", "Ninj'arrr", nil, "ninja"))
-
-    player:addComponent(Player:new("player"))
-    player:addComponent(SyncTransform:new("SyncTransform"))
-    player.components.player.target = mouseTarget.transform
-    player:addComponent(Camera:new("playercam"))
-
-    shadow = player:addComponent(Sprite:new("shadow", "blur"))
+    shadow = ninja:addComponent(Sprite:new("shadow", "blur"))
     shadow.color = Color:new(0, 0, 0, 0.5)
     shadow.order = 1
     shadow.scaleFactor = 0.3
+
 
     -- Test Enemy
     local names = {"John", "Captain Silver", "Barnacle", "William"}
@@ -83,28 +91,25 @@ function love.load()
         enemy.components.physics:pull()
     end
     
-    -- test menu button
-    uiRoot = state.scene:addEntity(Entity:new("butten"))
-    testButton = uiRoot:addComponent(MenuButton:new("button"))
-    testButton.position = Vector:new(Vector.WindowSize.x - 30, 10)
-    testButton.size = Vector:new(20, 20)
-    testButton.text = "x"
-    testButton.click = function() love.event.quit() end
+    -- UI TEST 
+    if isClient then
+        uiRoot = state.scene:addEntity(Entity:new("butten"))
 
-    -- Chatlog
-    chatlog = uiRoot:addComponent(ChatLog:new("chatlog"))
-    chatlog:append("You started the client.")
-    chatlog:append("Welcome.")
+        -- Menu button
+        testButton = uiRoot:addComponent(MenuButton:new("button"))
+        testButton.position = Vector:new(Vector.WindowSize.x - 30, 10)
+        testButton.size = Vector:new(20, 20)
+        testButton.text = "x"
+        testButton.click = function() love.event.quit() end
 
-
-    background = menu.scene:addEntity(Entity:new("background"))
-  
+        -- Chatlog
+        chatlog = uiRoot:addComponent(ChatLog:new("chatlog"))
+        chatlog:append("You started the client.")
+        chatlog:append("Welcome.")
+    end
     
-    background:addComponent(Sprite:new("background",engine.resources.image["background"]))
-    background:addComponent(Score:new("score", {{"Caro",5, true},{"Rafael",7, false},{"Paul",7,true},{"Damian",8,true}, {"Blubb",2,true}}, "pirates"))
-
-    engine:pushState(state)
 end
+
 
 function love.keypressed(key)
     if key == "f1" and engine:getCurrentState() == state then
@@ -115,10 +120,6 @@ end
 function love.update(dt)
     fixedupdatecheck(dt)
     tween.update(dt)
-end
-
-function love.draw()
-    love.graphics.setBackgroundColor(150, 150, 150)
 end
 
 -- fixed timestep stuff
@@ -136,5 +137,3 @@ end
 function love.fixedupdate(dt)
 end
 -- end of fixed timestep stuff
-
-engine:subscribe()

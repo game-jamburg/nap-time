@@ -9,6 +9,7 @@ function MenuButton:initialize(name)
     self.text = "Click me"
     self.hover = false
     self.click = nil
+    self.wasDown = false
 
     self.font = FontFace.Default
     self.fontsize = 20
@@ -24,11 +25,11 @@ function MenuButton:onUpdate(dt)
         end
     end
     
-    if self.hover and love.mouse.isDown("l") and not wasDown then
+    if self.hover and love.mouse.isDown("l") and not self.wasDown and self.click then
         self:click()
     end
     
-    wasDown = love.mouse.isDown("l")
+    self.wasDown = love.mouse.isDown("l")
 end
 
 function MenuButton:onDraw()

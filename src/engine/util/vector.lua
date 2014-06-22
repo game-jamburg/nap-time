@@ -173,6 +173,10 @@ function Vector:cross(v)
 	return self.x * v.y - self.y * v.x
 end
 
+function Vector:isZero()
+    return self.x == 0 and self.y == 0
+end
+
 function Vector:unpack()
     return self.x, self.y
 end

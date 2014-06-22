@@ -4,12 +4,16 @@ function Player:initialize(name)
     self.speed = 600
 
     self.attacking = false
+    self.movement = Vector:new()
+    self.previousAngle = nil
 
     Component.initialize(self, name)
 end
 
 function Player:onAdd(entity)
-    self.movement = Vector:new()
+    if not self.entity.components.camera then
+        self.entity:addComponent(Camera:new("camera"))
+    end
 end
 
 function Player:getCharacter()
@@ -17,6 +21,8 @@ function Player:getCharacter()
 end
  
 function Player:onFixedUpdate(dt)
+    local sync = false
+
     local input = Vector:new()
     if love.keyboard.isDown("left")  or love.keyboard.isDown("a") then input.x = -1 end
     if love.keyboard.isDown("right") or love.keyboard.isDown("d") then input.x =  1 end
@@ -27,7 +33,10 @@ function Player:onFixedUpdate(dt)
     local ms = 20
     self.movement = self.movement * (1 - dt * ms) + input * dt * ms
     
-    local standing = self.movement:len() < 0.1
+    local standing = self.movement:len() < 0.05
+    if standing then
+        self.movement = Vector:new()
+    end
 
     if not self.attacking then
         self:getCharacter():setAnimation(standing and "idle" or "walk")
@@ -39,16 +48,27 @@ function Player:onFixedUpdate(dt)
     -- lower body rotates with movement direction
     if not standing then
         self.entity.children.lower.transform.rotation = self.movement:angle()
+        sync = true
     end
 
-    -- upper body rotates to target
-    if self.target then
-        local lookDirection = self.target.position - self.entity.transform.position
-        self.entity.children.upper.transform.rotation = lookDirection:angle()
+    -- upper body rotates to mouse
+    local view = self.entity.scene.view
+    local mouse = view and view:toLocal(Mouse.Position) or Mouse.Position
+    local lookDirection = mouse - self.entity.transform.position
+    local angle = lookDirection:angle()
+    if self.previousAngle == nil or angle ~= self.previousAngle then
+        self.entity.children.upper.transform.rotation = angle
+        sync = true
     end
+    self.previousAngle = angle
 
     -- tell the physics we changed stuff :)
     self.entity.components.physics:pull()
+
+    -- update network
+    if isClient and sync then
+        client:syncTopLevelEntity(self.entity)
+    end
 end
 
 function Player:onEvent(type, data)
