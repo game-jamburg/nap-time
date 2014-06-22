@@ -55,7 +55,24 @@ function Character:damage(amount)
         self.entity.children.label.components.text = nil
         self.entity.components.shadow = nil
         self.entity.components.physics = nil
-        
+
+        -- Check if all characters are dead
+        local piratesDead = true
+        for key, entity in pairs(state.scene.entities) do
+            if entity:hasComponent(Character) then
+                local char = entity.components.character
+                if char.type == "ninja" and char.dead then
+                    engine:pushState(score)
+                elseif char.type == "pirate" and not char.dead then
+                    piratesDead = false
+                end
+            end
+        end
+        if piratesDead then
+            engine:pushState(score)
+        end
+
+
         Log:info("Character died.")
     end
 end

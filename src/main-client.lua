@@ -5,7 +5,7 @@ function loadState()
     createMenu()
 
     engine.renderer.preRender = function(drawable)
-        if not client.playerName then return end
+        if not (client.playerName and engine:getCurrentState() == state) then return end
         local lamp = drawable.entity.scene.entities[client.playerName].components.lamp
         local isPlayer = drawable.entity.parent and drawable.entity.parent.components.player
         if engine.resources.image.lightmap and not isPlayer and lamp then
