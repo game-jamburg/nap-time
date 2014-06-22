@@ -63,6 +63,8 @@ function Character:damage(amount)
             if entity:hasComponent(Character) then
                 local char = entity.components.character
                 if char.type == "ninja" and char.dead then
+                    score.scene.background.components.score.team = "pirate"
+                    score.scene.background.components.score:enter()
                     engine:pushState(score)
                 elseif char.type == "pirate" and not char.dead then
                     piratesDead = false
@@ -70,6 +72,8 @@ function Character:damage(amount)
             end
         end
         if piratesDead then
+            score.scene.background.components.score.team = "ninja"
+            score.scene.background.components.score:enter()
             engine:pushState(score)
         end
 

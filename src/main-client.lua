@@ -33,9 +33,8 @@ function createScore()
     score.scene.view = View:new()
 
     background = score.scene:addEntity(Entity:new("background"))
-    background:addComponent(Score:new("score", {{"Caro",5, true},{"Rafael",7, false},{"Paul",7,true},{"Damian",8,true}, {"Blubb",2,true}}, "pirates"))
-
-
+    background:addComponent(Score:new("score", {{"Caro",0, true},{"Rafael",0, false},{"Paul",0,true},{"Damian",0,true}, {"Blubb",0,true}}, "pirate"))
+    score.scene.background = background
 end
 
 function createMenu()
