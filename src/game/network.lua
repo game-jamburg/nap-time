@@ -24,7 +24,7 @@ function Server:preUpdate(dt)
 end
 
 function Server:onConnect(id)
-    Log:debug(string.format("Client connected: %s", id))
+    Log:info(string.format("Client connected: %s", id))
 
     table.insert(self.clients, id)
 
@@ -33,7 +33,7 @@ function Server:onConnect(id)
 end
 
 function Server:onReceive(data, id)
-    -- Log:verbose("Data received: " .. id .. " > " .. data)
+    Log:verbose("Message received from " .. id)
 
     local type, payload = splitMessage(data)
     if payload then
@@ -43,7 +43,7 @@ function Server:onReceive(data, id)
 end
 
 function Server:onDisconnect(ip, port)
-    Log:debug("Client disconnected: " .. ip .. ":" .. port)
+    Log:info("Client disconnected: " .. ip .. ":" .. port)
 end
 
 function Server:onEvent(type, data)
@@ -123,9 +123,8 @@ function Client:preUpdate(dt)
 end
 
 function Client:onMessage(type, data)
-    -- Log:debug("Client received message of type " .. type)
+    Log:verbose("Client received message of type " .. type)
     if type == "snapshot" then
-        Log:debug("Received snapshot")
         self.scene:apply(data)
 
         -- now, make sure we own our player

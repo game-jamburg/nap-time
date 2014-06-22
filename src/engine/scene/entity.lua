@@ -113,8 +113,6 @@ function Entity:serialize(depth)
 end
 
 function Entity:apply(entity)
-    Log:verbose("Apply entity", self.name)
-
     for _, child in pairs(entity.children) do
         if self.children[child.name] then
             self.children[child.name]:apply(child)
