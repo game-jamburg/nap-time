@@ -6,6 +6,7 @@ function Player:initialize(name)
     self.attacking = false
     self.movement = Vector:new()
     self.previousAngle = nil
+    self.lastMouse = Vector:new()
 
     Component.initialize(self, name)
 end

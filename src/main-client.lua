@@ -17,6 +17,8 @@ function loadState()
             stencil:send("sampling", lamp.sampling)
             stencil:send("radius", lamp.radius)
             stencil:send("scale", {scale.x, scale.y})
+            stencil:send("translate", {0.5, 0.7})
+            stencil:send("angle", -client.scene.view.parent.rotation)
             love.graphics.setShader(stencil)
         else
             love.graphics.setShader()

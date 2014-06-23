@@ -3,13 +3,23 @@ extern float radius;
 extern float sampling;
 extern vec2 size;
 extern vec2 scale;
+extern vec2 translate;
+extern float angle;
+
+vec2 rotate(vec2 v, float a) {
+    float c = cos(a);
+    float s = sin(a);
+    return vec2(c * v.x - s * v.y, s * v.x + c * v.y);
+}
 
 vec4 effect(vec4 color, Image texture, vec2 texture_coords, vec2 pixel_coords) {
     vec2 screenPos = vec2(gl_FragCoord.x, size.y - gl_FragCoord.y);
-    vec2 screenCenter = size / 2;
+    vec2 screenCenter = size * translate;
     vec2 fromScreenCenter = screenPos - screenCenter;
 
     fromScreenCenter /= scale;
+
+    fromScreenCenter = rotate(fromScreenCenter, angle);
 
     vec2 mapCenter = vec2(radius * sampling);
     vec2 mapPos = mapCenter + fromScreenCenter;
