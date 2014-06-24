@@ -7,7 +7,7 @@ end
 function Camera:onUpdate(dt)
     -- local level = self.entity.scene.entities.level.components.level
     local pos = - self.entity.transform.global.position
-    local rot = - self.entity.children.lower.transform.global.rotation
+    local rot = - self.entity.children.upper.transform.global.rotation
 
     local view = View:new()
     local view2 = View:new(view)

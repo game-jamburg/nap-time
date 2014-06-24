@@ -5,8 +5,11 @@ function Player:initialize(name)
 
     self.attacking = false
     self.movement = Vector:new()
-    self.previousAngle = nil
     self.lastMouse = Vector:new()
+
+    self.prev = {}
+    self.prev.position = Vector:new()
+    self.prev.rotation = 0
 
     Component.initialize(self, name)
 end
@@ -23,57 +26,69 @@ function Player:getCharacter()
 end
  
 function Player:onFixedUpdate(dt)
+    self.entity.components.physics:push()
+    self.prev.position = self.entity.transform.global.position
+
+
+
     if isClient then
         if self.entity.name ~= client.playerName then
             Log:error("WTF", self.entity.name, client.playerName)
         end
         local sync = false
 
-        local input = Vector:new()
-        if love.keyboard.isDown("left")  or love.keyboard.isDown("a") then input.x = -1 end
-        if love.keyboard.isDown("right") or love.keyboard.isDown("d") then input.x =  1 end
-        if love.keyboard.isDown("down")  or love.keyboard.isDown("s") then input.y =  1 end
-        if love.keyboard.isDown("up")    or love.keyboard.isDown("w") then input.y = -1 end
-        input:normalize()
+        local move = Vector:new()
+        local turn = 0
+        if                                  love.keyboard.isDown("q") then move.x = -1 end
+        if                                  love.keyboard.isDown("e") then move.x =  1 end
+        if love.keyboard.isDown("down")  or love.keyboard.isDown("s") then move.y =  1 end
+        if love.keyboard.isDown("up")    or love.keyboard.isDown("w") then move.y = -1 end
+        if love.keyboard.isDown("left")  or love.keyboard.isDown("a") then turn   = -1 end
+        if love.keyboard.isDown("right") or love.keyboard.isDown("d") then turn   =  1 end
+        move:normalize()
 
-        local ms = 20
-        self.movement = self.movement * (1 - dt * ms) + input * dt * ms
+        -- local ms = 20
+        -- self.movement = input --self.movement * (1 - dt * ms) + input * dt * ms
+
+        move = move:rotated(self.prev.rotation) * dt * self.speed
+        turn = turn * dt * 4
         
-        local standing = self.movement:len() < 0.05
-        if standing then
-            self.movement = Vector:new()
-        end
+        local standing = move:len() < 0.05
+        -- if standing then
+            -- self.movement.y = 0
+        -- end
 
         if not self:getCharacter().attacking then
             self:getCharacter():setAnimation(standing and "idle" or "walk")
         end
 
+        local rotation = self.prev.rotation + turn
+        local position = self.prev.position + move
+        self:setTransform(position, rotation, move:angle())
+
         -- lower body rotates with movement direction
-        if not standing then
-            self.entity.children.lower.transform.rotation = self.movement:angle()
-            sync = true
-        end
+        sync = (not standing) or (self.prev.rotation == nil or turn)
 
         -- upper body rotates to mouse
-        local view = self.entity.scene.view
-        local mouse = view and view:toLocal(Mouse.Position) or Mouse.Position
-        local lookDirection = mouse - self.entity.transform.position
-        local angle = lookDirection:angle()
-        if self.previousAngle == nil or angle ~= self.previousAngle then
-            self.entity.children.upper.transform.rotation = angle
-            sync = true
-        end
-        self.previousAngle = angle
         if sync then
             client:syncTopLevelEntity(self.entity)
         end
     end    
 
     -- update position
-    self.entity.transform.position = self.entity.transform.position + self.movement * self.speed * dt
+    -- self.entity.transform.position = self.entity.transform.position + self.movement * self.speed * dt
 
     -- tell the physics we changed stuff :)
     if self.entity.components.physics then self.entity.components.physics:pull() end
+end
+
+function Player:setTransform(position, rotation, moveRotation)
+    self.entity.transform.position = position
+    self.entity.children.lower.transform.rotation = moveRotation or rotation
+    self.entity.children.upper.transform.rotation = rotation
+
+    self.prev.position = position
+    self.prev.rotation = rotation
 end
 
 function Player:onEvent(type, data)

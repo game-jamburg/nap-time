@@ -13,7 +13,8 @@ vec2 rotate(vec2 v, float a) {
 }
 
 vec4 effect(vec4 color, Image texture, vec2 texture_coords, vec2 pixel_coords) {
-    vec2 screenPos = vec2(gl_FragCoord.x, size.y - gl_FragCoord.y);
+    vec2 frag = gl_FragCoord.xy;
+    vec2 screenPos = vec2(frag.x, size.y - frag.y);
     vec2 screenCenter = size * translate;
     vec2 fromScreenCenter = screenPos - screenCenter;
 

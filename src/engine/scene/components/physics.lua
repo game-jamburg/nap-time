@@ -16,6 +16,13 @@ function Physics:pull()
     end
 end
 
+function Physics:push()
+    if self.body then
+        self.entity.transform.global.position = Vector:new(self.body:getX(), self.body:getY())
+        self.entity.transform.global.rotation = self.body:getAngle()
+    end
+end
+
 function Physics:onUpdate(dt)
     if not self.body and self.entity and self.entity.scene then
         local shape, dx, dy, density = self.createShape()

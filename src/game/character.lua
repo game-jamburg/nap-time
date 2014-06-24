@@ -12,7 +12,7 @@ end
 function Character:onAdd(entity)
     if not entity.children.upper then
         self.upper = entity:addChild(Entity:new("upper"))
-
+        
         local upperAnimation = Animation:new("animation", "none")
         upperAnimation.origin = Vector:new(0.6, 0.7)
         upperAnimation.order = 2
@@ -28,7 +28,7 @@ function Character:onAdd(entity)
         entity.children.lower:addComponent(lowerAnimation)
     end
 
-    local shadow = ninja:addComponent(Sprite:new("shadow", "blur"))
+    local shadow = self.entity:addComponent(Sprite:new("shadow", "blur"))
     shadow.color = Color:new(0, 0, 0, 0.5)
     shadow.order = 1
     shadow.scaleFactor = 0.3

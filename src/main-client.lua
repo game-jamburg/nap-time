@@ -81,4 +81,6 @@ end
 
 function love.draw()
     love.graphics.setBackgroundColor(0, 0, 0)
+    love.graphics.print("Connecting", 100, 100)
+    return not client.playerName
 end

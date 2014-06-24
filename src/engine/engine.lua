@@ -108,7 +108,11 @@ function Engine:subscribe()
 
     local draw = love.draw
     love.draw = function()
-        if draw then draw() end
+        if draw then 
+            if draw() then
+                return
+            end
+        end
         self:draw()
     end
 
