@@ -4,8 +4,8 @@ function Player:initialize(name)
     self.speed = 600
 
     self.attacking = false
-    self.movement = Vector:new()
-    self.lastMouse = Vector:new()
+    self.move = Vector:new()
+    self.turn = 0
 
     self.prev = {}
     self.prev.position = Vector:new()
@@ -47,16 +47,17 @@ function Player:onFixedUpdate(dt)
         if love.keyboard.isDown("right") or love.keyboard.isDown("d") then turn   =  1 end
         move:normalize()
 
-        -- local ms = 20
-        -- self.movement = input --self.movement * (1 - dt * ms) + input * dt * ms
+
+        local d = 20
+        move = self.move * (1 - dt * d) + move * dt * d
+        turn = self.turn * (1 - dt * d) + turn * dt * d
+        self.move = move
+        self.turn = turn
 
         move = move:rotated(self.prev.rotation) * dt * self.speed
         turn = turn * dt * 4
         
         local standing = move:len() < 0.05
-        -- if standing then
-            -- self.movement.y = 0
-        -- end
 
         if not self:getCharacter().attacking then
             self:getCharacter():setAnimation(standing and "idle" or "walk")
